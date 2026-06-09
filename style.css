@@ -82,32 +82,29 @@ h1 {
   font-size: 1.05em;
 }
 
-/* Logos de tipos centrados y grandes */
-.card .types {
-  display: flex;
-  justify-content: center;
-  flex-wrap: wrap;
-  gap: 8px;
-  margin-top: 8px;
-}
-
-.type {
+/* Logos en tarjetas principales (sin fondo) */
+.card .type {
+  background: none !important;
+  padding: 0;
+  margin: 0;
+  border-radius: 0;
   display: inline-flex;
   align-items: center;
-  justify-content: center;
-  padding: 6px 10px;
-  border-radius: 20px;
-  color: white;
-  font-weight: bold;
   gap: 6px;
 }
 
-/* Logos en tarjetas principales */
 .card .type img {
   width: 32px;
   height: 32px;
 }
 
+/* Mantener con fondo en el modal */
+#modalBody .type {
+  background: #666 !important;           /* o el color según el tipo */
+  padding: 8px 18px;
+  border-radius: 20px;
+  font-size: 1.1em;
+}
 /* Modal */
 .modal {
   display: none;
