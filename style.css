@@ -1,66 +1,30 @@
-body {
-  font-family: 'Segoe UI', sans-serif;
-  background: #f0f0f0;
-  margin: 0;
-  padding: 20px;
-}
+body { font-family: Arial, sans-serif; background: #0f1620; color: #ddd; margin: 0; padding: 20px; }
+.container { max-width: 1200px; margin: auto; }
+h1 { text-align: center; color: #ffcc00; }
+.tabs { display: flex; gap: 10px; margin: 20px 0; justify-content: center; }
+.tab { padding: 10px 20px; background: #1e2a44; border: none; color: white; cursor: pointer; border-radius: 6px; }
+.tab.active { background: #ffcc00; color: black; }
 
-.container {
-  max-width: 1200px;
-  margin: 0 auto;
-}
-
-h1 {
-  text-align: center;
-  color: #333;
-}
-
-#searchInput {
+.search-input {
   width: 100%;
   padding: 15px;
   font-size: 18px;
-  border: 2px solid #4CAF50;
   border-radius: 8px;
+  border: none;
   margin-bottom: 20px;
 }
 
-.results {
+.results-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   gap: 15px;
 }
 
 .card {
-  background: white;
+  background: #1e2a44;
   border-radius: 10px;
   padding: 15px;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-  transition: transform 0.2s;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
 }
-
-.card:hover {
-  transform: translateY(-5px);
-}
-
-.card h3 {
-  margin: 0 0 10px 0;
-  color: #333;
-}
-
-.card .number {
-  color: #666;
-  font-size: 0.9em;
-}
-
-.card .types {
-  margin-top: 8px;
-}
-
-.type {
-  display: inline-block;
-  padding: 3px 10px;
-  border-radius: 12px;
-  font-size: 0.85em;
-  color: white;
-  margin-right: 5px;
-}
+.card h3 { margin: 0 0 8px 0; color: #ffcc00; }
+.type { padding: 4px 10px; border-radius: 12px; font-size: 0.85em; margin-right: 5px; }
