@@ -1,15 +1,12 @@
 body {
   font-family: Arial, sans-serif;
-  background: #0f1620;
+  background: #0a0f1c;
   color: #ddd;
   margin: 0;
   padding: 20px;
 }
 
-.container {
-  max-width: 1200px;
-  margin: auto;
-}
+.container { max-width: 1200px; margin: auto; }
 
 h1 {
   text-align: center;
@@ -30,7 +27,7 @@ h1 {
 
 .results-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
   gap: 20px;
 }
 
@@ -39,17 +36,18 @@ h1 {
   border-radius: 12px;
   padding: 12px;
   text-align: center;
-  transition: transform 0.2s;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+  transition: transform 0.2s, box-shadow 0.2s;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.4);
 }
 
 .card:hover {
-  transform: scale(1.05);
+  transform: scale(1.06);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.5);
 }
 
 .card img {
-  width: 120px;
-  height: 120px;
+  width: 130px;
+  height: 130px;
   image-rendering: pixelated;
   margin-bottom: 10px;
 }
@@ -66,9 +64,10 @@ h1 {
 
 .type {
   display: inline-block;
-  padding: 4px 12px;
-  margin: 2px;
-  border-radius: 12px;
+  padding: 5px 14px;
+  margin: 3px;
+  border-radius: 20px;
   font-size: 0.85em;
   color: white;
+  font-weight: bold;
 }
