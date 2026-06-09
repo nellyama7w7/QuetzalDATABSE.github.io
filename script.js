@@ -1,47 +1,74 @@
-fetch("pokemon.json")
+let pokemonData = [];
+
+// Cargar el JSON
+fetch('pokemon.json')
   .then(response => response.json())
   .then(data => {
-
-    // Eliminar la primera fila de encabezados
+    // El primer objeto es el encabezado, lo ignoramos
     pokemonData = data.slice(1);
+    renderAll();
+  })
+  .catch(err => console.error('Error cargando JSON:', err));
 
-    renderPokemon(pokemonData);
-  });
+const searchInput = document.getElementById('searchInput');
+const resultsDiv = document.getElementById('results');
 
-const searchInput = document.getElementById("search");
-
-searchInput.addEventListener("input", () => {
-
-  const value = searchInput.value.toLowerCase();
-
-  const filtered = pokemonData.filter(pokemon =>
-    pokemon.field2?.toLowerCase().includes(value)
-  );
-
-  renderPokemon(filtered);
+searchInput.addEventListener('input', () => {
+  const term = searchInput.value.toLowerCase().trim();
+  filterPokemon(term);
 });
 
-function renderPokemon(list) {
+function filterPokemon(term) {
+  if (!term) {
+    renderAll();
+    return;
+  }
 
-  const container = document.getElementById("results");
+  const filtered = pokemonData.filter(p => {
+    const name = (p.field2 || '').toLowerCase();
+    const nameUpper = (p.field3 || '').toLowerCase();
+    const number = (p.field4 || '').toLowerCase();
+    const type1 = (p.field6 || '').toLowerCase();
+    const type2 = (p.field8 || '').toLowerCase();
 
-  container.innerHTML = list.map(pokemon => `
+    return name.includes(term) || 
+           nameUpper.includes(term) || 
+           number.includes(term) || 
+           type1.includes(term) || 
+           type2.includes(term);
+  });
 
-    <div class="card">
+  renderResults(filtered);
+}
 
-      <h2>#${pokemon.field4 || ""} ${pokemon.field2 || ""}</h2>
+function renderAll() {
+  renderResults(pokemonData);
+}
 
+function renderResults(pokemons) {
+  resultsDiv.innerHTML = '';
+
+  if (pokemons.length === 0) {
+    resultsDiv.innerHTML = '<p>No se encontraron Pokémon</p>';
+    return;
+  }
+
+  pokemons.forEach(p => {
+    const card = document.createElement('div');
+    card.className = 'card';
+    
+    const type2 = p.field8 ? `<span class="type" style="background:#666;">${p.field8}</span>` : '';
+    
+    card.innerHTML = `
+      <h3>${p.field2}</h3>
+      <div class="number">#${p.field4}</div>
       <div class="types">
-        <span class="type">${pokemon.field6 || ""}</span>
-        ${pokemon.field8 ? `<span class="type">${pokemon.field8}</span>` : ""}
+        <span class="type" style="background:#4CAF50;">${p.field6}</span>
+        ${type2}
       </div>
-
-      <p><strong>HP:</strong> ${pokemon.field10 || ""}</p>
-      <p><strong>Ataque:</strong> ${pokemon.field11 || ""}</p>
-      <p><strong>Defensa:</strong> ${pokemon.field12 || ""}</p>
-
-    </div>
-
-  `).join("");
-
+      <p>PS: ${p.field10} | ATQ: ${p.field11} | DEF: ${p.field12}</p>
+    `;
+    
+    resultsDiv.appendChild(card);
+  });
 }
