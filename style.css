@@ -31,6 +31,31 @@ h1 {
   gap: 20px;
 }
 
+/* Tabs */
+.tabs {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+  justify-content: center;
+}
+
+.tab {
+  padding: 12px 24px;
+  background: #1e2a44;
+  color: #ddd;
+  border: none;
+  border-radius: 8px 8px 0 0;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.tab.active {
+  background: #ffcc00;
+  color: #0a0f1c;
+  font-weight: bold;
+}
+
+/* Tarjetas */
 .card {
   background: #1e2a44;
   border-radius: 12px;
@@ -47,8 +72,6 @@ h1 {
 }
 
 .card img {
-  width: 130px;
-  height: 130px;
   image-rendering: pixelated;
   margin-bottom: 10px;
 }
@@ -59,7 +82,7 @@ h1 {
   font-size: 1.05em;
 }
 
-/* Logos pequeños en tarjetas principales */
+/* Logos de tipos centrados y grandes */
 .card .types {
   display: flex;
   justify-content: center;
@@ -74,17 +97,18 @@ h1 {
   justify-content: center;
   padding: 6px 10px;
   border-radius: 20px;
-  font-size: 0.85em;
   color: white;
   font-weight: bold;
   gap: 6px;
 }
+
 /* Logos en tarjetas principales */
 .card .type img {
   width: 32px;
   height: 32px;
 }
-/* ================== MODAL ================== */
+
+/* Modal */
 .modal {
   display: none;
   position: fixed;
@@ -133,33 +157,4 @@ h1 {
 .stats-fill {
   height: 100%;
   background: linear-gradient(90deg, #4CAF50, #8BC34A);
-}
-/* Tabs */
-.tabs {
-  display: flex;
-  gap: 10px;
-  margin-bottom: 20px;
-  justify-content: center;
-}
-
-.tab {
-  padding: 12px 24px;
-  background: #1e2a44;
-  color: #ddd;
-  border: none;
-  border-radius: 8px 8px 0 0;
-  cursor: pointer;
-  font-size: 16px;
-}
-
-.tab.active {
-  background: #ffcc00;
-  color: #0a0f1c;
-  font-weight: bold;
-}
-
-/* Objetos */
-.object-card .card img {
-  width: 100px;
-  height: 100px;
 }
