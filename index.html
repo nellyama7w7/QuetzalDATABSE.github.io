@@ -3,32 +3,72 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Pokémon Quetzal - Buscador</title>
+  <title>Pokémon Quetzal Database</title>
+
   <link rel="stylesheet" href="style.css">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
-  <div class="container">
-    <h1>Pokémon Quetzal v8.4 DATABASE</h1>
-    
-    <!-- Pestañas -->
-    <div class="tabs">
-      <button class="tab active" data-tab="pokemon">Pokémon</button>
-      <button class="tab" data-tab="objetos">Objetos</button>
+
+<div class="background-glow"></div>
+
+<div class="container">
+
+  <header class="hero">
+
+    <div class="logo-circle">
+      ⚡
     </div>
 
-    <input type="text" id="search" placeholder="Busca por nombre o número..." class="search-input">
+    <h1>
+      Pokémon
+      <span>Quetzal</span>
+    </h1>
 
-    <div id="results" class="results-grid"></div>
+    <p class="subtitle">
+      Complete Database v8.4
+    </p>
+
+  </header>
+
+  <div class="tabs">
+    <button class="tab active" data-tab="pokemon">
+      Pokémon
+    </button>
+
+    <button class="tab" data-tab="objetos">
+      Objetos
+    </button>
   </div>
 
-  <!-- MODAL -->
-  <div id="detailModal" class="modal">
-    <div class="modal-content">
-      <span class="close">&times;</span>
-      <div id="modalBody"></div>
-    </div>
+  <input
+    type="text"
+    id="search"
+    placeholder="Buscar Pokémon, número, objeto..."
+    class="search-input"
+  >
+
+  <div id="results" class="results-grid"></div>
+
+</div>
+
+<div id="detailModal" class="modal">
+
+  <div class="modal-content">
+
+    <span class="close">&times;</span>
+
+    <div id="modalBody"></div>
+
   </div>
 
-  <script src="script.js"></script>
+</div>
+
+<script src="script.js"></script>
+
 </body>
 </html>
