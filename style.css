@@ -208,30 +208,3 @@ body {
   .hero h1 { font-size: 2.2rem; }
   .results-grid { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); }
 }
-/* CABECERA ÉPICA */
-.header {
-  background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.8)), 
-              url('https://raw.githubusercontent.com/nellyama7w7/QuetzalSprites/main/PokemonSprites/RAYQUAZA.png') center/cover no-repeat;
-  height: 280px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  color: white;
-  position: relative;
-  margin-bottom: 30px;
-  border-bottom: 4px solid #ffcc00;
-}
-
-.header-content h1 {
-  font-size: 3.2em;
-  margin: 0;
-  text-shadow: 0 4px 10px rgba(0,0,0,0.8);
-  color: #ffcc00;
-}
-
-.header-content p {
-  font-size: 1.3em;
-  margin: 10px 0 0 0;
-  opacity: 0.9;
-}
