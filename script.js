@@ -1,61 +1,66 @@
-let pokemon = [], objetos = [], habilidades = [];
-let currentTab = 'pokemon';
+let pokemonData = [];
 
-async function loadData() {
-  pokemon = await fetch('pokemon.json').then(r => r.json());
-  objetos = await fetch('objetos.json').then(r => r.json());
-  habilidades = await fetch('habilidades.json').then(r => r.json());
-  render();
-}
+fetch('pokemon.json')
+  .then(response => response.json())
+  .then(data => {
+    pokemonData = data.slice(1); // Saltamos el encabezado
+    renderResults(pokemonData);
+  })
+  .catch(err => console.error(err));
 
-document.querySelectorAll('.tab').forEach(tab => {
-  tab.addEventListener('click', () => {
-    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-    tab.classList.add('active');
-    currentTab = tab.dataset.tab;
-    document.getElementById('search').value = '';
-    render();
-  });
+const searchInput = document.getElementById('search');
+const resultsDiv = document.getElementById('results');
+
+searchInput.addEventListener('input', () => {
+  const term = searchInput.value.toLowerCase().trim();
+  filterPokemon(term);
 });
 
-document.getElementById('search').addEventListener('input', render);
-
-function render() {
-  const term = document.getElementById('search').value.toLowerCase().trim();
-  const container = document.getElementById('results');
-  container.innerHTML = '';
-
-  let data = currentTab === 'pokemon' ? pokemon : 
-             currentTab === 'objetos' ? objetos : habilidades;
-
-  const filtered = data.filter(item => {
-    const text = Object.values(item).join(' ').toLowerCase();
-    return text.includes(term);
-  });
-
-  if (filtered.length === 0) {
-    container.innerHTML = '<p style="grid-column: 1/-1; text-align:center;">No se encontraron resultados</p>';
+function filterPokemon(term) {
+  if (!term) {
+    renderResults(pokemonData);
     return;
   }
 
-  filtered.forEach(item => {
+  const filtered = pokemonData.filter(p => {
+    const name = (p.field2 || '').toLowerCase();
+    const number = (p.field4 || '').toLowerCase();
+    const type1 = (p.field6 || '').toLowerCase();
+    const type2 = (p.field8 || '').toLowerCase();
+
+    return name.includes(term) || 
+           number.includes(term) || 
+           type1.includes(term) || 
+           type2.includes(term);
+  });
+
+  renderResults(filtered);
+}
+
+function renderResults(pokemons) {
+  resultsDiv.innerHTML = '';
+
+  if (pokemons.length === 0) {
+    resultsDiv.innerHTML = '<p style="grid-column:1/-1;text-align:center;color:#aaa;">No se encontraron Pokémon</p>';
+    return;
+  }
+
+  pokemons.forEach(p => {
     const card = document.createElement('div');
     card.className = 'card';
 
-    if (currentTab === 'pokemon') {
-      card.innerHTML = `
-        <h3>#${item.No || item.field4} ${item.Pokemon || item.field2}</h3>
-        <p><strong>Tipos:</strong> ${item.Type || item.field6} ${item.Type2 || item.field8 || ''}</p>
-        <p>PS: ${item.PS} | ATQ: ${item.ATQ} | DEF: ${item.DEF}</p>
-      `;
-    } else if (currentTab === 'objetos') {
-      card.innerHTML = `<h3>${item.Name || item.field2}</h3><p>${item.Descripcion || ''}</p>`;
-    } else {
-      card.innerHTML = `<h3>${item.Habilidad}</h3><p>${item.Descripcion}</p>`;
-    }
+    const type2HTML = p.field8 ? 
+      `<span class="type" style="background:#666;">${p.field8}</span>` : '';
 
-    container.appendChild(card);
+    card.innerHTML = `
+      <img src="${p.field5}" alt="${p.field2}">
+      <h3>#${p.field4} ${p.field2}</h3>
+      <div class="types">
+        <span class="type" style="background:#4CAF50;">${p.field6}</span>
+        ${type2HTML}
+      </div>
+    `;
+
+    resultsDiv.appendChild(card);
   });
 }
-
-loadData();
