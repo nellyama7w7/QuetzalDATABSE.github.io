@@ -60,24 +60,30 @@ h1 {
 }
 
 /* Logos pequeños en tarjetas principales */
-.card .type img {
-  width: 18px;
-  height: 18px;
-  vertical-align: middle;
+.card .types {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 8px;
 }
 
 .type {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  padding: 5px 12px;
-  margin: 3px;
+  justify-content: center;
+  padding: 6px 10px;
   border-radius: 20px;
   font-size: 0.85em;
   color: white;
   font-weight: bold;
+  gap: 6px;
 }
-
+/* Logos en tarjetas principales */
+.card .type img {
+  width: 32px;
+  height: 32px;
+}
 /* ================== MODAL ================== */
 .modal {
   display: none;
