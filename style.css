@@ -5,7 +5,7 @@
 }
 
 :root {
-  --gold: #ffcc00;
+  --green: #00c853;
   --dark: #0b1220;
   --card: #162033;
   --text: #e8ecf7;
@@ -14,25 +14,24 @@
 body {
   font-family: 'Poppins', sans-serif;
   background: 
-    radial-gradient(circle at top left, #2049ff33, transparent 35%),
-    radial-gradient(circle at bottom right, #ffcc0033, transparent 30%),
+    radial-gradient(circle at top left, #00c85333, transparent 35%),
+    radial-gradient(circle at bottom right, #00b14033, transparent 30%),
     linear-gradient(135deg, #07111d, #111827);
   min-height: 100vh;
   color: var(--text);
   overflow-x: hidden;
 }
 
-/* ================== HERO Y BUSCADOR ================== */
+/* ================== HERO ================== */
 .hero { text-align: center; margin-bottom: 35px; }
 
 .logo-circle {
   width: 90px; height: 90px;
   margin: auto; margin-bottom: 20px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #ffcc00, #ffe066);
+  background: linear-gradient(135deg, #00c853, #64dd17);
   display: flex; justify-content: center; align-items: center;
-  font-size: 42px;
-  box-shadow: 0 0 30px rgba(255,204,0,.4);
+  box-shadow: 0 0 30px rgba(0, 200, 83, 0.5);
 }
 
 .hero h1 {
@@ -40,7 +39,7 @@ body {
   font-weight: 700;
   letter-spacing: 2px;
 }
-.hero h1 span { color: var(--gold); }
+.hero h1 span { color: var(--green); }
 
 /* BUSCADOR */
 .search-input {
@@ -55,11 +54,10 @@ body {
   font-size: 16px;
   border: 1px solid rgba(255,255,255,.08);
   margin-bottom: 25px;
-  transition: .3s;
 }
 .search-input:focus {
-  border-color: var(--gold);
-  box-shadow: 0 0 25px rgba(255,204,0,.25);
+  border-color: var(--green);
+  box-shadow: 0 0 25px rgba(0, 200, 83, .3);
 }
 
 /* TABS */
@@ -79,7 +77,7 @@ body {
   transition: .3s;
 }
 .tab.active {
-  background: linear-gradient(90deg, #ffcc00, #ffd84d);
+  background: linear-gradient(90deg, #00c853, #64dd17);
   color: #111827;
   font-weight: 600;
 }
@@ -91,7 +89,7 @@ body {
   gap: 24px;
 }
 
-/* TARJETAS */
+/* TARJETAS - Con efecto hover bonito */
 .card {
   position: relative;
   overflow: hidden;
@@ -105,21 +103,21 @@ body {
   transition: .35s;
 }
 .card:hover {
-  transform: translateY(-10px);
-  box-shadow: 0 20px 35px rgba(0,0,0,.4), 0 0 20px rgba(255,204,0,.15);
+  transform: translateY(-12px);
+  box-shadow: 0 25px 40px rgba(0,0,0,.5), 0 0 25px rgba(0, 200, 83, .25);
 }
 .card img {
   image-rendering: pixelated;
   transition: .3s;
 }
-.card:hover img { transform: scale(1.15); }
+.card:hover img { transform: scale(1.12); }
 .card h3 {
-  margin-top: 10px;
-  color: var(--gold);
-  font-size: 1rem;
+  margin-top: 12px;
+  color: var(--green);
+  font-size: 1.05rem;
 }
 
-/* TIPOS - Solo logos grandes sin fondo en tarjetas principales */
+/* TIPOS - Solo logos sin fondo en principal */
 .card .types {
   display: flex;
   justify-content: center;
@@ -136,7 +134,7 @@ body {
   height: 34px;
 }
 
-/* ================== MODAL (CORREGIDO) ================== */
+/* ================== MODAL ================== */
 .modal {
   display: none;
   position: fixed;
@@ -156,12 +154,6 @@ body {
   border-radius: 28px;
   position: relative;
   border: 1px solid rgba(255,255,255,.08);
-  animation: modalOpen .25s ease;
-}
-
-@keyframes modalOpen {
-  from { opacity: 0; transform: scale(.9); }
-  to { opacity: 1; transform: scale(1); }
 }
 
 .close {
@@ -169,16 +161,15 @@ body {
   top: 20px;
   right: 30px;
   font-size: 36px;
-  color: var(--gold);
+  color: var(--green);
   cursor: pointer;
 }
 .close:hover { color: white; }
 
-/* Contenido del modal */
 #modalBody {
   max-height: 75vh;
   overflow-y: auto;
-  padding-right: 10px;
+  padding-right: 15px;
 }
 
 #modalBody img.main-sprite {
@@ -200,7 +191,6 @@ body {
   font-size: 1.05em;
 }
 
-/* Stats */
 .stats-bar {
   height: 18px;
   background: #2d3f5e;
@@ -210,12 +200,11 @@ body {
 }
 .stats-fill {
   height: 100%;
-  background: linear-gradient(90deg, #00e676, #8bc34a);
+  background: linear-gradient(90deg, #00e676, #64dd17);
 }
 
 /* Responsive */
 @media (max-width: 700px) {
-  .hero h1 { font-size: 2rem; }
+  .hero h1 { font-size: 2.2rem; }
   .results-grid { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); }
-  #modalBody { max-height: 65vh; }
 }
