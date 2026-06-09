@@ -5,29 +5,51 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Pokémon Quetzal Database</title>
   <link rel="stylesheet" href="style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
-  <!-- CABECERA ÉPICA -->
-  <header class="header">
-    <div class="header-content">
-      <h1>Pokémon Quetzal Database</h1>
-      <p>v8.4 - Buscador Completo</p>
-    </div>
-  </header>
+  <div class="background-glow"></div>
+  <div class="bg-pokeball left"></div>
+  <div class="bg-pokeball right"></div>
+  <div class="particles">
+    <span></span><span></span><span></span><span></span>
+    <span></span><span></span><span></span><span></span>
+  </div>
 
   <div class="container">
-    <!-- Pestañas -->
+    <header class="hero">
+      <div class="logo-circle">
+        <img src="https://raw.githubusercontent.com/nellyama7w7/QuetzalSprites/main/PokemonSprites/RAYQUAZA.png" 
+             alt="Quetzal Logo" 
+             style="width:85px; height:85px; image-rendering:pixelated;">
+      </div>
+      <h1>
+        Pokémon
+        <span>Quetzal</span>
+      </h1>
+      <p class="subtitle">
+        Database v8.4
+      </p>
+    </header>
+
     <div class="tabs">
       <button class="tab active" data-tab="pokemon">Pokémon</button>
       <button class="tab" data-tab="objetos">Objetos</button>
     </div>
 
-    <input type="text" id="search" placeholder="Busca por nombre o número..." class="search-input">
+    <input
+      type="text"
+      id="search"
+      placeholder="Buscar Pokémon, número, objeto..."
+      class="search-input"
+    >
 
     <div id="results" class="results-grid"></div>
   </div>
 
-  <!-- MODAL -->
+  <!-- Modal -->
   <div id="detailModal" class="modal">
     <div class="modal-content">
       <span class="close">&times;</span>
