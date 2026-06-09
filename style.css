@@ -53,23 +53,11 @@ h1 {
   margin-bottom: 10px;
 }
 
-.card h3 {
-  margin: 8px 0 6px 0;
-  color: #ffcc00;
-  font-size: 1.05em;
-}
-
-.type {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 5px 12px;
-  margin: 3px;
-  border-radius: 20px;
-  font-size: 0.85em;
-  color: white;
-  font-weight: bold;
-  background: #666;
+/* Logos de tipo en las tarjetas principales - más pequeños */
+.card .type img {
+  width: 18px;
+  height: 18px;
+  vertical-align: middle;
 }
 
 /* ================== MODAL ================== */
