@@ -8,14 +8,20 @@
 </head>
 <body>
   <div class="container">
-    <h1>Pokémon Quetzal DATABASE v8.4</h1>
+    <h1>🔍 Pokémon Quetzal v8.4</h1>
     
+    <!-- Pestañas -->
+    <div class="tabs">
+      <button class="tab active" data-tab="pokemon">Pokémon</button>
+      <button class="tab" data-tab="objetos">Objetos</button>
+    </div>
+
     <input type="text" id="search" placeholder="Busca por nombre o número..." class="search-input">
 
     <div id="results" class="results-grid"></div>
   </div>
 
-  <!-- MODAL DETALLADO -->
+  <!-- MODAL -->
   <div id="detailModal" class="modal">
     <div class="modal-content">
       <span class="close">&times;</span>
