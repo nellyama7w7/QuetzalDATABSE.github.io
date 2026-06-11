@@ -5,13 +5,13 @@ let currentTab = 'pokemon';
 // Datos de Créditos y Changelog (Fácil de editar aquí mismo)
 const infoExtra = {
   creditos: [
-    { rol: "Desarrollador Web", nombre: "Tu Nombre/Nickname", link: "#" },
-    { rol: "Sprites y Recursos", nombre: "Nellyama7w7 (GitHub)", link: "https://github.com/nellyama7w7/QuetzalSprites" },
+    { rol: "Desarrollador Web", nombre: "Chayansito", link: "#" },
+    { rol: "Sprites y Recursos", nombre: "Nelly & Danny", link: "#" },
     { rol: "Creador de Pokémon Quetzal", nombre: "TenmaRH", link: "#" }
   ],
   changelog: [
     { version: "v1.1", fecha: "10 de Junio, 2026", cambios: ["Se agregó la pestaña de créditos.", "Se rediseñó el modal de detalles.", "Se separó el ratio de captura del crecimiento para mejor lectura."] },
-    { version: "v1.0", fecha: "Mayo, 2026", cambios: ["Lanzamiento inicial de la base de datos.", "Buscador funcional de Pokémon y Objetos."] }
+    { version: "v1.0", fecha: "09 de Junio, 2026", cambios: ["Lanzamiento inicial de la base de datos.", "Buscador funcional de Pokémon y Objetos."] }
   ]
 };
 
