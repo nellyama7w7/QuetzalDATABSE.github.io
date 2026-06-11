@@ -2,6 +2,19 @@ let pokemonData = [];
 let objetosData = [];
 let currentTab = 'pokemon';
 
+// Datos de Créditos y Changelog (Fácil de editar aquí mismo)
+const infoExtra = {
+  creditos: [
+    { rol: "Desarrollador Web", nombre: "Tu Nombre/Nickname", link: "#" },
+    { rol: "Sprites y Recursos", nombre: "Nellyama7w7 (GitHub)", link: "https://github.com/nellyama7w7/QuetzalSprites" },
+    { rol: "Creador de Pokémon Quetzal", nombre: "TenmaRH", link: "#" }
+  ],
+  changelog: [
+    { version: "v1.1", fecha: "10 de Junio, 2026", cambios: ["Se agregó la pestaña de créditos.", "Se rediseñó el modal de detalles.", "Se separó el ratio de captura del crecimiento para mejor lectura."] },
+    { version: "v1.0", fecha: "Mayo, 2026", cambios: ["Lanzamiento inicial de la base de datos.", "Buscador funcional de Pokémon y Objetos."] }
+  ]
+};
+
 const typeColors = {
   "Planta": "#4CAF50", "Fuego": "#FF5722", "Agua": "#2196F3", "Electrico": "#FFEB3B",
   "Hielo": "#81D4FA", "Lucha": "#D32F2F", "Veneno": "#9C27B0", "Tierra": "#E67E22",
@@ -26,7 +39,7 @@ async function loadData() {
     renderResults(pokemonData);
   } catch (e) {
     console.error("Error cargando archivos:", e);
-    resultsDiv.innerHTML = '<p style="color:red; text-align:center;">Error al cargar los datos. Verifica que pokemon.json y Objetos.json estén en la carpeta.</p>';
+    resultsDiv.innerHTML = '<p style="color:red; text-align:center;">Error al cargar los datos. Verifica los archivos JSON.</p>';
   }
 }
 
@@ -36,7 +49,6 @@ const modal = document.getElementById('detailModal');
 const modalBody = document.getElementById('modalBody');
 const closeBtn = document.querySelector('.close');
 
-// Iniciar carga de datos
 loadData();
 
 document.querySelectorAll('.tab').forEach(tab => {
@@ -45,6 +57,14 @@ document.querySelectorAll('.tab').forEach(tab => {
     tab.classList.add('active');
     currentTab = tab.dataset.tab;
     searchInput.value = '';
+    
+    // Ocultar barra de búsqueda si estamos en Créditos
+    if (currentTab === 'creditos') {
+      searchInput.style.display = 'none';
+    } else {
+      searchInput.style.display = 'block';
+    }
+    
     renderCurrentTab();
   });
 });
@@ -61,7 +81,8 @@ window.addEventListener('click', e => {
 
 function renderCurrentTab() {
   if (currentTab === 'pokemon') renderResults(pokemonData);
-  else renderObjects(objetosData);
+  else if (currentTab === 'objetos') renderObjects(objetosData);
+  else renderCreditsAndChangelog();
 }
 
 function filterCurrentTab(term) {
@@ -70,7 +91,7 @@ function filterCurrentTab(term) {
   if (currentTab === 'pokemon') {
     const filtered = pokemonData.filter(p => Object.values(p).join(' ').toLowerCase().includes(term));
     renderResults(filtered);
-  } else {
+  } else if (currentTab === 'objetos') {
     const filtered = objetosData.filter(o => Object.values(o).join(' ').toLowerCase().includes(term));
     renderObjects(filtered);
   }
@@ -82,14 +103,11 @@ function renderResults(pokemons) {
     resultsDiv.innerHTML = '<p style="grid-column:1/-1;text-align:center;color:#aaa;">No se encontraron Pokémon</p>';
     return;
   }
-
   pokemons.forEach(p => {
     const card = document.createElement('div');
     card.className = 'card';
-
     const type1 = p.field6 || '';
     const type2 = p.field8 || '';
-
     card.innerHTML = `
       <img src="${p.field5}" alt="${p.field2}">
       <h3>#${p.field4} ${p.field2}</h3>
@@ -102,7 +120,6 @@ function renderResults(pokemons) {
         </span>` : ''}
       </div>
     `;
-
     card.addEventListener('click', () => showPokemonDetail(p));
     resultsDiv.appendChild(card);
   });
@@ -114,11 +131,9 @@ function renderObjects(objetos) {
     resultsDiv.innerHTML = '<p style="grid-column:1/-1;text-align:center;color:#aaa;">No se encontraron Objetos</p>';
     return;
   }
-
   objetos.forEach(o => {
     const card = document.createElement('div');
     card.className = 'card';
-
     card.innerHTML = `
       <img src="${o.field5}" alt="${o.field3}" style="width:110px;height:110px;">
       <h3>#${o.field2} ${o.field3}</h3>
@@ -127,10 +142,49 @@ function renderObjects(objetos) {
         <strong>Compra:</strong> ${o.field8} | <strong>Venta:</strong> ${o.field7}
       </p>
     `;
-
     card.addEventListener('click', () => showObjectDetail(o));
     resultsDiv.appendChild(card);
   });
+}
+
+function renderCreditsAndChangelog() {
+  // Ocupa todo el ancho de la grid usando estilos inline sencillos y limpios
+  resultsDiv.innerHTML = `
+    <div style="grid-column: 1 / -1; display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; margin-top: 20px;">
+      
+      <div class="card" style="text-align: left; cursor: default; height: fit-content;">
+        <h2 style="color: var(--green); margin-bottom: 20px; border-bottom: 2px solid rgba(0,200,83,0.2); padding-bottom: 8px;">👥 Créditos del Proyecto</h2>
+        <div style="display: flex; flex-direction: column; gap: 16px;">
+          ${infoExtra.creditos.map(c => `
+            <div>
+              <p style="font-size: 0.85em; color: #aaa; text-transform: uppercase; letter-spacing: 1px;">${c.rol}</p>
+              <p style="font-size: 1.1em; font-weight: 500; color: #fff;">
+                ${c.link !== '#' ? `<a href="${c.link}" target="_blank" style="color: #64dd17; text-decoration: none; border-bottom: 1px dashed;">${c.nombre}</a>` : c.nombre}
+              </p>
+            </div>
+          `).join('')}
+        </div>
+      </div>
+
+      <div class="card" style="text-align: left; cursor: default;">
+        <h2 style="color: var(--green); margin-bottom: 20px; border-bottom: 2px solid rgba(0,200,83,0.2); padding-bottom: 8px;">⏳ Historial de Cambios</h2>
+        <div style="display: flex; flex-direction: column; gap: 24px;">
+          ${infoExtra.changelog.map(ch => `
+            <div style="border-left: 3px solid var(--green); padding-left: 15px;">
+              <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 8px;">
+                <strong style="font-size: 1.2rem; color: #fff;">${ch.version}</strong>
+                <span style="font-size: 0.85em; color: #aaa;">${ch.fecha}</span>
+              </div>
+              <ul style="padding-left: 18px; color: #ced4da; font-size: 0.95em; display: flex; flex-direction: column; gap: 6px;">
+                ${ch.cambios.map(cambio => `<li>${cambio}</li>`).join('')}
+              </ul>
+            </div>
+          `).join('')}
+        </div>
+      </div>
+
+    </div>
+  `;
 }
 
 function showPokemonDetail(p) {
