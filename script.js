@@ -159,7 +159,7 @@ function showPokemonDetail(p) {
 
     <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 40px; margin-top: 20px;">
       <div>
-        <h3 style="color: var(--green); margin-bottom: 20px; border-bottom: 2px solid rgba(0,200,83,0.2); padding-bottom: 8px;">Estadísticas Base</h3>
+        <h3 style="color: var(--green); margin-bottom: 20px; border-bottom: 2px solid rgba(0,200,83,0.2); padding-bottom: 8px;">📊 Estadísticas Base</h3>
         <div style="display: flex; flex-direction: column; gap: 16px;">
   `;
 
@@ -184,14 +184,15 @@ function showPokemonDetail(p) {
       </div>
       
       <div>
-        <h3 style="color: var(--green); margin-bottom: 20px; border-bottom: 2px solid rgba(0,200,83,0.2); padding-bottom: 8px;">Datos del Pokémon</h3>
-        <div style="display: flex; flex-direction: column; gap: 12px; font-size: 0.95em; color: #e8ecf7;">
-          <p><strong style="color: #aaa;">Categoría:</strong> ${p.field17 || '-'}</p>
-          <p><strong style="color: #aaa;">Altura:</strong> ${p.field18 || '-'} | <strong style="color: #aaa;">Peso:</strong> ${p.field19 || '-'}</p>
-          <p><strong style="color: #aaa;">Ratio Captura:</strong> ${p.field20 || '-'} | <strong style="color: #aaa;">Crecimiento:</strong> ${p.field21 || '-'}</p>
-          <p><strong style="color: #aaa;">Habilidades:</strong> <span style="color: #00c853;">${p.field24 || '-'}</span> ${p.field25 ? ` / ${p.field25}` : ''} ${p.field26 ? ` / <em style="color:#ff80ab;">${p.field26} (Oculta)</em>` : ''}</p>
-          <p><strong style="color: #aaa;">Objetos:</strong> ${p.field22 || '-'} ${p.field23 ? ` / ${p.field23}` : ''}</p>
-          <p><strong style="color: #aaa;">Grupo Huevo:</strong> ${p.field27 || '-'} ${p.field28 ? ` / ${p.field28}` : ''}</p>
+        <h3 style="color: var(--green); margin-bottom: 20px; border-bottom: 2px solid rgba(0,200,83,0.2); padding-bottom: 8px;">📝 Datos del Pokémon</h3>
+        <div style="display: flex; flex-direction: column; gap: 14px; font-size: 0.95em; color: #e8ecf7;">
+          <p><strong style="color: #aaa;">🏷️ Categoría:</strong> ${p.field17 || '-'}</p>
+          <p><strong style="color: #aaa;">📏 Altura:</strong> ${p.field18 || '-'} | <strong style="color: #aaa;">⚖️ Peso:</strong> ${p.field19 || '-'}</p>
+          <p><strong style="color: #aaa;">🎯 Ratio Captura:</strong> ${p.field20 || '-'}</p>
+          <p><strong style="color: #aaa;">📈 Crecimiento:</strong> ${p.field21 || '-'}</p>
+          <p><strong style="color: #aaa;">🧬 Habilidades:</strong> <span style="color: #00c853;">${p.field24 || '-'}</span> ${p.field25 ? ` / ${p.field25}` : ''} ${p.field26 ? ` / <em style="color:#ff80ab;">${p.field26} (Oculta)</em>` : ''}</p>
+          <p><strong style="color: #aaa;">🎒 Objetos:</strong> ${p.field22 || '-'} ${p.field23 ? ` / ${p.field23}` : ''}</p>
+          <p><strong style="color: #aaa;">🥚 Grupo Huevo:</strong> ${p.field27 || '-'} ${p.field28 ? ` / ${p.field28}` : ''}</p>
         </div>
       </div>
     </div>
@@ -208,11 +209,11 @@ function showObjectDetail(o) {
       <h2 style="font-size: 2rem; font-weight: 700;">#${o.field2} ${o.field3}</h2>
     </div>
     <div style="margin-top: 25px;">
-      <h3 style="color: var(--green); margin-bottom: 10px; border-bottom: 2px solid rgba(0,200,83,0.2); padding-bottom: 6px;">Descripción</h3>
+      <h3 style="color: var(--green); margin-bottom: 10px; border-bottom: 2px solid rgba(0,200,83,0.2); padding-bottom: 6px;">📖 Descripción</h3>
       <p style="color: #e8ecf7; line-height: 1.6; font-size: 0.95em;">${o.field6 || 'Sin descripción'}</p>
     </div>
     <div style="margin-top: 25px;">
-      <h3 style="color: var(--green); margin-bottom: 10px; border-bottom: 2px solid rgba(0,200,83,0.2); padding-bottom: 6px;">Precios</h3>
+      <h3 style="color: var(--green); margin-bottom: 10px; border-bottom: 2px solid rgba(0,200,83,0.2); padding-bottom: 6px;">💰 Precios</h3>
       <p style="font-size: 0.95em; color: #e8ecf7;"><strong style="color: #aaa;">Compra:</strong> ${o.field8 || '-'} pokedólares</p>
       <p style="font-size: 0.95em; color: #e8ecf7; margin-top: 6px;"><strong style="color: #aaa;">Venta:</strong> ${o.field7 || '-'} pokedólares</p>
     </div>
