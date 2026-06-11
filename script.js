@@ -206,3 +206,30 @@ function showObjectDetail(o) {
   modalBody.innerHTML = html;
   modal.style.display = 'block';
 }
+function renderCreditos() {
+  resultsDiv.innerHTML = `
+    <div style="max-width: 820px; margin: 0 auto; padding: 40px 30px; background: rgba(255,255,255,0.06); border-radius: 20px; border: 1px solid rgba(0,200,83,0.3);">
+      
+      <h2 style="color: #00c853; text-align: center; margin-bottom: 30px;">Información Importante</h2>
+      
+      <div style="background: rgba(0,0,0,0.4); padding: 25px; border-radius: 16px; line-height: 1.8; font-size: 1.02em;">
+        <p><strong>Importante:</strong></p>
+        <ul style="margin-left: 20px; margin-bottom: 25px;">
+          <li>Esta es una recopilación de todos los datos del juego. No pretendemos robar ni apropiarnos de nada. Todos los derechos pertenecen a sus respectivos autores.</li>
+          <li>Este es un proyecto en desarrollo y probablemente sea eliminado cuando esté disponible la wiki oficial del juego.</li>
+        </ul>
+
+        <p><strong>Créditos:</strong></p>
+        <ul style="margin-left: 20px;">
+          <li><strong>Sprites y Base de Datos:</strong> Nelly & Danny </li>
+          <li><strong>Desarrollo de la Web:</strong>Chayansito</li>
+          <li><strong>ROM Hack:</strong> Pokémon Quetzal v8.4</li>
+        </ul>
+      </div>
+
+      <p style="text-align: center; margin-top: 35px; color: #888; font-size: 0.95em;">
+        Gracias por usar la Pokédex de Pokémon Quetzal ❤️
+      </p>
+    </div>
+  `;
+}
