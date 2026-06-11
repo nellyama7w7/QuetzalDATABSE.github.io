@@ -26,17 +26,18 @@ async function loadData() {
     renderResults(pokemonData);
   } catch (e) {
     console.error("Error cargando archivos:", e);
-    resultsDiv.innerHTML = '<p style="color:red;">Error al cargar los datos. Verifica que pokemon.json y Objetos.json estén en la carpeta.</p>';
+    resultsDiv.innerHTML = '<p style="color:red; text-align:center;">Error al cargar los datos. Verifica que pokemon.json y Objetos.json estén en la carpeta.</p>';
   }
 }
-
-loadData();
 
 const searchInput = document.getElementById('search');
 const resultsDiv = document.getElementById('results');
 const modal = document.getElementById('detailModal');
 const modalBody = document.getElementById('modalBody');
 const closeBtn = document.querySelector('.close');
+
+// Iniciar carga de datos
+loadData();
 
 document.querySelectorAll('.tab').forEach(tab => {
   tab.addEventListener('click', () => {
@@ -133,58 +134,67 @@ function renderObjects(objetos) {
 }
 
 function showPokemonDetail(p) {
-  // (Código completo del modal de Pokémon)
+  const stats = [
+    {name: "PS", value: p.field10, color: "#FF5959"},
+    {name: "Ataque", value: p.field11, color: "#F5AC78"},
+    {name: "Defensa", value: p.field12, color: "#FAE078"},
+    {name: "At. Especial", value: p.field13, color: "#9DB7F5"},
+    {name: "Def. Especial", value: p.field14, color: "#A7DB8D"},
+    {name: "Velocidad", value: p.field15, color: "#FA92B2"}
+  ];
+
   let html = `
-    <div style="text-align:center;">
+    <div style="text-align:center; margin-bottom: 30px;">
       <img src="${p.field5}" class="main-sprite" alt="${p.field2}">
-      <h2>#${p.field4} ${p.field2}</h2>
-      <div style="margin:20px 0;">
-        <span class="type" style="background:${typeColors[p.field6]||'#666'};font-size:1.1em;padding:8px 18px;">
-          <img src="${p.field7}" width="24" height="24" style="vertical-align:middle;"> ${p.field6}
+      <h2 style="font-size: 2.2rem; font-weight: 700; margin-bottom: 10px;">#${p.field4} ${p.field2}</h2>
+      <div style="margin:15px 0;">
+        <span class="type" style="background:${typeColors[p.field6]||'#666'}; box-shadow: 0 4px 10px rgba(0,0,0,0.3)">
+          <img src="${p.field7}" width="20" height="20" style="vertical-align:middle;"> ${p.field6}
         </span>
-        ${p.field8 ? `<span class="type" style="background:${typeColors[p.field8]||'#666'};font-size:1.1em;padding:8px 18px;">
-          <img src="${p.field9}" width="24" height="24" style="vertical-align:middle;"> ${p.field8}
+        ${p.field8 ? `<span class="type" style="background:${typeColors[p.field8]||'#666'}; box-shadow: 0 4px 10px rgba(0,0,0,0.3)">
+          <img src="${p.field9}" width="20" height="20" style="vertical-align:middle;"> ${p.field8}
         </span>` : ''}
       </div>
     </div>
 
-    <h3>Estadísticas Base</h3>
-    <div style="display: flex; flex-direction: column; gap: 14px; max-width: 420px; margin: 0 auto;">
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 40px; margin-top: 20px;">
+      <div>
+        <h3 style="color: var(--green); margin-bottom: 20px; border-bottom: 2px solid rgba(0,200,83,0.2); padding-bottom: 8px;">Estadísticas Base</h3>
+        <div style="display: flex; flex-direction: column; gap: 16px;">
   `;
-
-  const stats = [
-    {name: "PS", value: p.field10},
-    {name: "Ataque", value: p.field11},
-    {name: "Defensa", value: p.field12},
-    {name: "Ataque Especial", value: p.field13},
-    {name: "Defensa Especial", value: p.field14},
-    {name: "Velocidad", value: p.field15}
-  ];
 
   stats.forEach(stat => {
     const value = parseInt(stat.value) || 0;
     const percent = Math.min(100, (value / 255) * 100);
     html += `
       <div>
-        <div style="display:flex;justify-content:space-between;margin-bottom:4px;">
-          <strong>${stat.name}</strong>
-          <span>${value}</span>
+        <div style="display:flex; justify-content:space-between; font-size: 0.95em;">
+          <span style="color: #aaa;">${stat.name}</span>
+          <strong style="color: #fff;">${value}</strong>
         </div>
-        <div class="stats-bar"><div class="stats-fill" style="width:${percent}%"></div></div>
+        <div class="stats-bar">
+          <div class="stats-fill" style="width:${percent}%; --stat-color: ${stat.color};"></div>
+        </div>
       </div>
     `;
   });
 
-  html += `</div>`;
-
   html += `
-    <h3>Información</h3>
-    <p><strong>Categoría:</strong> ${p.field17 || '-'}</p>
-    <p><strong>Altura:</strong> ${p.field18 || '-'} | <strong>Peso:</strong> ${p.field19 || '-'}</p>
-    <p><strong>Prob. Captura:</strong> ${p.field20 || '-'} | <strong>Crecimiento:</strong> ${p.field21 || '-'}</p>
-    <p><strong>Habilidades:</strong> ${p.field24 || '-'} ${p.field25 ? ` / ${p.field25}` : ''} ${p.field26 ? ` / ${p.field26}` : ''}</p>
-    <p><strong>Objetos:</strong> ${p.field22 || '-'} ${p.field23 ? ` / ${p.field23}` : ''}</p>
-    <p><strong>Grupo Huevo:</strong> ${p.field27 || '-'} ${p.field28 ? ` / ${p.field28}` : ''}</p>
+        </div>
+      </div>
+      
+      <div>
+        <h3 style="color: var(--green); margin-bottom: 20px; border-bottom: 2px solid rgba(0,200,83,0.2); padding-bottom: 8px;">Datos del Pokémon</h3>
+        <div style="display: flex; flex-direction: column; gap: 12px; font-size: 0.95em; color: #e8ecf7;">
+          <p><strong style="color: #aaa;">Categoría:</strong> ${p.field17 || '-'}</p>
+          <p><strong style="color: #aaa;">Altura:</strong> ${p.field18 || '-'} | <strong style="color: #aaa;">Peso:</strong> ${p.field19 || '-'}</p>
+          <p><strong style="color: #aaa;">Ratio Captura:</strong> ${p.field20 || '-'} | <strong style="color: #aaa;">Crecimiento:</strong> ${p.field21 || '-'}</p>
+          <p><strong style="color: #aaa;">Habilidades:</strong> <span style="color: #00c853;">${p.field24 || '-'}</span> ${p.field25 ? ` / ${p.field25}` : ''} ${p.field26 ? ` / <em style="color:#ff80ab;">${p.field26} (Oculta)</em>` : ''}</p>
+          <p><strong style="color: #aaa;">Objetos:</strong> ${p.field22 || '-'} ${p.field23 ? ` / ${p.field23}` : ''}</p>
+          <p><strong style="color: #aaa;">Grupo Huevo:</strong> ${p.field27 || '-'} ${p.field28 ? ` / ${p.field28}` : ''}</p>
+        </div>
+      </div>
+    </div>
   `;
 
   modalBody.innerHTML = html;
@@ -194,42 +204,19 @@ function showPokemonDetail(p) {
 function showObjectDetail(o) {
   const html = `
     <div style="text-align:center;">
-      <img src="${o.field5}" style="width:180px; height:180px; image-rendering:pixelated;">
-      <h2>#${o.field2} ${o.field3}</h2>
+      <img src="${o.field5}" style="width:180px; height:180px; image-rendering:pixelated; margin-bottom: 15px;">
+      <h2 style="font-size: 2rem; font-weight: 700;">#${o.field2} ${o.field3}</h2>
     </div>
-    <h3>Descripción</h3>
-    <p>${o.field6 || 'Sin descripción'}</p>
-    <h3>Precios</h3>
-    <p><strong>Compra:</strong> ${o.field8 || '-'}</p>
-    <p><strong>Venta:</strong> ${o.field7 || '-'}</p>
+    <div style="margin-top: 25px;">
+      <h3 style="color: var(--green); margin-bottom: 10px; border-bottom: 2px solid rgba(0,200,83,0.2); padding-bottom: 6px;">Descripción</h3>
+      <p style="color: #e8ecf7; line-height: 1.6; font-size: 0.95em;">${o.field6 || 'Sin descripción'}</p>
+    </div>
+    <div style="margin-top: 25px;">
+      <h3 style="color: var(--green); margin-bottom: 10px; border-bottom: 2px solid rgba(0,200,83,0.2); padding-bottom: 6px;">Precios</h3>
+      <p style="font-size: 0.95em; color: #e8ecf7;"><strong style="color: #aaa;">Compra:</strong> ${o.field8 || '-'} pokedólares</p>
+      <p style="font-size: 0.95em; color: #e8ecf7; margin-top: 6px;"><strong style="color: #aaa;">Venta:</strong> ${o.field7 || '-'} pokedólares</p>
+    </div>
   `;
   modalBody.innerHTML = html;
   modal.style.display = 'block';
-}
-function renderCreditos() {
-  resultsDiv.innerHTML = `
-    <div style="max-width: 820px; margin: 0 auto; padding: 40px 30px; background: rgba(255,255,255,0.06); border-radius: 20px; border: 1px solid rgba(0,200,83,0.3);">
-      
-      <h2 style="color: #00c853; text-align: center; margin-bottom: 30px;">Información Importante</h2>
-      
-      <div style="background: rgba(0,0,0,0.4); padding: 25px; border-radius: 16px; line-height: 1.8; font-size: 1.02em;">
-        <p><strong>Importante:</strong></p>
-        <ul style="margin-left: 20px; margin-bottom: 25px;">
-          <li>Esta es una recopilación de todos los datos del juego. No pretendemos robar ni apropiarnos de nada. Todos los derechos pertenecen a sus respectivos autores.</li>
-          <li>Este es un proyecto en desarrollo y probablemente sea eliminado cuando esté disponible la wiki oficial del juego.</li>
-        </ul>
-
-        <p><strong>Créditos:</strong></p>
-        <ul style="margin-left: 20px;">
-          <li><strong>Sprites y Base de Datos:</strong> Nelly & Danny </li>
-          <li><strong>Desarrollo de la Web:</strong>Chayansito</li>
-          <li><strong>ROM Hack:</strong> Pokémon Quetzal v8.4</li>
-        </ul>
-      </div>
-
-      <p style="text-align: center; margin-top: 35px; color: #888; font-size: 0.95em;">
-        Gracias por usar la Pokédex de Pokémon Quetzal ❤️
-      </p>
-    </div>
-  `;
 }
