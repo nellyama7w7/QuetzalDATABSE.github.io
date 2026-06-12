@@ -197,32 +197,19 @@ function showPokemonDetail(p) {
     {name: "Velocidad", value: p.field15, color: "#FA92B2"}
   ];
 
-  let html = `
-    <div style="text-align:center; margin-bottom: 30px;">
-      <img src="${p.field5}" class="main-sprite" alt="${p.field2}">
-      <h2 style="font-size: 2.2rem; font-weight: 700; margin-bottom: 10px;">#${p.field4} ${p.field2}</h2>
-      <div style="margin:15px 0;">
-        <span class="type" style="background:${typeColors[p.field6]||'#666'}; box-shadow: 0 4px 10px rgba(0,0,0,0.3)">
-          <img src="${p.field7}" width="20" height="20" style="vertical-align:middle;"> ${p.field6}
-        </span>
-        ${p.field8 ? `<span class="type" style="background:${typeColors[p.field8]||'#666'}; box-shadow: 0 4px 10px rgba(0,0,0,0.3)">
-          <img src="${p.field9}" width="20" height="20" style="vertical-align:middle;"> ${p.field8}
-        </span>` : ''}
-      </div>
-    </div>
+  // Sprite shiny: reemplazar el path del sprite normal por la versión shiny
+  const shinyUrl = p.field5 ? p.field5.replace('/PokemonSprites/', '/ShinySprites/') : '';
 
-    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 40px; margin-top: 20px;">
-      <div>
-        <h3 style="color: var(--green); margin-bottom: 20px; border-bottom: 2px solid rgba(0,200,83,0.2); padding-bottom: 8px;">📊 Estadísticas Base</h3>
-        <div style="display: flex; flex-direction: column; gap: 16px;">
-  `;
+  // Color del tipo principal para el banner
+  const bannerColor = typeColors[p.field6] || '#00c853';
 
+  let statsHtml = '';
   stats.forEach(stat => {
     const value = parseInt(stat.value) || 0;
     const percent = Math.min(100, (value / 255) * 100);
-    html += `
+    statsHtml += `
       <div>
-        <div style="display:flex; justify-content:space-between; font-size: 0.95em;">
+        <div style="display:flex; justify-content:space-between; font-size: 0.9em;">
           <span style="color: #aaa;">${stat.name}</span>
           <strong style="color: #fff;">${value}</strong>
         </div>
@@ -233,21 +220,107 @@ function showPokemonDetail(p) {
     `;
   });
 
-  html += `
-        </div>
-      </div>
-      
+  const html = `
+    <!-- BANNER SUPERIOR con nombre y número -->
+    <div style="
+      margin: -35px -35px 0 -35px;
+      padding: 22px 35px;
+      background: linear-gradient(135deg, ${bannerColor}33, ${bannerColor}15);
+      border-bottom: 2px solid ${bannerColor}55;
+      border-radius: 28px 28px 0 0;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    ">
+      <img src="${p.field16}" alt="${p.field2}" style="width:40px;height:40px;image-rendering:pixelated;">
       <div>
-        <h3 style="color: var(--green); margin-bottom: 20px; border-bottom: 2px solid rgba(0,200,83,0.2); padding-bottom: 8px;">📝 Datos del Pokémon</h3>
-        <div style="display: flex; flex-direction: column; gap: 14px; font-size: 0.95em; color: #e8ecf7;">
-          <p><strong style="color: #aaa;">🏷️ Categoría:</strong> ${p.field17 || '-'}</p>
-          <p><strong style="color: #aaa;">📏 Altura:</strong> ${p.field18 || '-'} | <strong style="color: #aaa;">⚖️ Peso:</strong> ${p.field19 || '-'}</p>
-          <p><strong style="color: #aaa;">🎯 Ratio Captura:</strong> ${p.field20 || '-'}</p>
-          <p><strong style="color: #aaa;">📈 Crecimiento:</strong> ${p.field21 || '-'}</p>
-          <p><strong style="color: #aaa;">🧬 Habilidades:</strong> <span style="color: #00c853;">${p.field24 || '-'}</span> ${p.field25 ? ` / ${p.field25}` : ''} ${p.field26 ? ` / <em style="color:#ff80ab;">${p.field26} (Oculta)</em>` : ''}</p>
-          <p><strong style="color: #aaa;">🎒 Objetos:</strong> ${p.field22 || '-'} ${p.field23 ? ` / ${p.field23}` : ''}</p>
-          <p><strong style="color: #aaa;">🥚 Grupo Huevo:</strong> ${p.field27 || '-'} ${p.field28 ? ` / ${p.field28}` : ''}</p>
+        <span style="font-size:0.8em;color:${bannerColor};font-weight:600;letter-spacing:2px;text-transform:uppercase;">#${p.field4}</span>
+        <h2 style="font-size:1.9rem;font-weight:700;line-height:1.1;color:#fff;">${p.field2}</h2>
+      </div>
+      <div style="margin-left:auto;display:flex;gap:8px;align-items:center;">
+        <span class="type" style="background:${typeColors[p.field6]||'#666'}; box-shadow: 0 4px 10px rgba(0,0,0,0.3); font-size:0.9em;">
+          <img src="${p.field7}" width="16" height="16" style="vertical-align:middle;"> ${p.field6}
+        </span>
+        ${p.field8 ? `<span class="type" style="background:${typeColors[p.field8]||'#666'}; box-shadow: 0 4px 10px rgba(0,0,0,0.3); font-size:0.9em;">
+          <img src="${p.field9}" width="16" height="16" style="vertical-align:middle;"> ${p.field8}
+        </span>` : ''}
+      </div>
+    </div>
+
+    <!-- CUERPO PRINCIPAL: izquierda sprites | derecha info -->
+    <div style="display:grid; grid-template-columns: 220px 1fr; gap: 28px; margin-top: 28px;">
+
+      <!-- COLUMNA IZQUIERDA: sprite normal + shiny + estadísticas -->
+      <div style="display:flex; flex-direction:column; gap:16px;">
+
+        <!-- Sprite normal -->
+        <div style="
+          background: rgba(255,255,255,0.04);
+          border: 1px solid rgba(255,255,255,0.08);
+          border-radius: 18px;
+          padding: 16px;
+          text-align:center;
+        ">
+          <p style="font-size:0.7em;color:#aaa;text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;">Normal</p>
+          <img src="${p.field5}" alt="${p.field2}" style="width:130px;height:130px;image-rendering:pixelated;">
         </div>
+
+        <!-- Sprite shiny -->
+        <div style="
+          background: rgba(255,215,0,0.04);
+          border: 1px solid rgba(255,215,0,0.15);
+          border-radius: 18px;
+          padding: 16px;
+          text-align:center;
+        ">
+          <p style="font-size:0.7em;color:#ffd700;text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;">✨ Shiny</p>
+          <img src="${shinyUrl}" alt="${p.field2} shiny"
+            style="width:130px;height:130px;image-rendering:pixelated;"
+            onerror="this.style.opacity='0.3'; this.src='${p.field5}';">
+        </div>
+
+      </div>
+
+      <!-- COLUMNA DERECHA: datos + stats -->
+      <div style="display:flex;flex-direction:column;gap:22px;">
+
+        <!-- Datos del Pokémon -->
+        <div style="
+          background: rgba(255,255,255,0.03);
+          border: 1px solid rgba(0,200,83,0.2);
+          border-radius: 18px;
+          padding: 20px;
+        ">
+          <h3 style="color:var(--green);margin-bottom:14px;font-size:1rem;border-bottom:1px solid rgba(0,200,83,0.15);padding-bottom:8px;">📝 Datos del Pokémon</h3>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;font-size:0.88em;color:#e8ecf7;">
+            <p><strong style="color:#aaa;">🏷️ Categoría</strong><br>${p.field17 || '-'}</p>
+            <p><strong style="color:#aaa;">📏 Altura</strong><br>${p.field18 || '-'}</p>
+            <p><strong style="color:#aaa;">⚖️ Peso</strong><br>${p.field19 || '-'}</p>
+            <p><strong style="color:#aaa;">🎯 Captura</strong><br>${p.field20 || '-'}</p>
+            <p><strong style="color:#aaa;">📈 Crecimiento</strong><br>${p.field21 || '-'}</p>
+            <p><strong style="color:#aaa;">🥚 Grupo Huevo</strong><br>${p.field27 || '-'}${p.field28 ? ` / ${p.field28}` : ''}</p>
+            <p style="grid-column:1/-1;"><strong style="color:#aaa;">🧬 Habilidades</strong><br>
+              <span style="color:#00c853;">${p.field24 || '-'}</span>
+              ${p.field25 ? ` / ${p.field25}` : ''}
+              ${p.field26 ? ` / <em style="color:#ff80ab;">${p.field26} (Oculta)</em>` : ''}
+            </p>
+            ${p.field22 ? `<p style="grid-column:1/-1;"><strong style="color:#aaa;">🎒 Objetos</strong><br>${p.field22}${p.field23 ? ` / ${p.field23}` : ''}</p>` : ''}
+          </div>
+        </div>
+
+        <!-- Estadísticas Base -->
+        <div style="
+          background: rgba(255,255,255,0.03);
+          border: 1px solid rgba(255,255,255,0.08);
+          border-radius: 18px;
+          padding: 20px;
+        ">
+          <h3 style="color:var(--green);margin-bottom:14px;font-size:1rem;border-bottom:1px solid rgba(0,200,83,0.15);padding-bottom:8px;">📊 Estadísticas Base</h3>
+          <div style="display:flex;flex-direction:column;gap:12px;">
+            ${statsHtml}
+          </div>
+        </div>
+
       </div>
     </div>
   `;
