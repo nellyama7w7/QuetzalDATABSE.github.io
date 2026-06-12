@@ -1,268 +1,396 @@
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+let pokemonData = [];
+let objetosData = [];
+let currentTab = 'pokemon';
+
+// Datos de Créditos y Changelog (Fácil de editar aquí mismo)
+const infoExtra = {
+  creditos: [
+    { rol: "Desarrollador Web", nombre: "Chayansito", link: "#" },
+    { rol: "Sprites y Recursos", nombre: "Nelly & Danny", link: "#" },
+    { rol: "Creador de Pokémon Quetzal", nombre: "TenmaRH", link: "#" }
+  ],
+  changelog: [
+    { version: "v1.1", fecha: "10 de Junio, 2026", cambios: ["Se agregó la pestaña de créditos.", "Se rediseñó el modal de detalles.", "Se separó el ratio de captura del crecimiento para mejor lectura."] },
+    { version: "v1.0", fecha: "09 de Junio, 2026", cambios: ["Lanzamiento inicial de la base de datos.", "Buscador funcional de Pokémon y Objetos."] }
+  ]
+};
+
+const typeColors = {
+  "Planta": "#4CAF50", "Fuego": "#FF5722", "Agua": "#2196F3", "Electrico": "#FFEB3B",
+  "Hielo": "#81D4FA", "Lucha": "#D32F2F", "Veneno": "#9C27B0", "Tierra": "#E67E22",
+  "Volador": "#81D4FA", "Psiquico": "#E91E63", "Bicho": "#8BC34A", "Roca": "#795548",
+  "Fantasma": "#673AB7", "Dragon": "#3F51B5", "Siniestro": "#212121", "Acero": "#607D8B",
+  "Hada": "#FF80AB", "Normal": "#9E9E9E"
+};
+
+async function loadData() {
+  try {
+    const [pokemonRes, objetosRes] = await Promise.all([
+      fetch('pokemon.json'),
+      fetch('Objetos.json')
+    ]);
+    
+    const pokemonJson = await pokemonRes.json();
+    const objetosJson = await objetosRes.json();
+    
+    pokemonData = pokemonJson.slice(1);
+    objetosData = objetosJson.slice(1);
+    
+    renderResults(pokemonData);
+  } catch (e) {
+    console.error("Error cargando archivos:", e);
+    resultsDiv.innerHTML = '<p style="color:red; text-align:center;">Error al cargar los datos. Verifica los archivos JSON.</p>';
+  }
 }
 
-:root {
-  --green: #00c853;
-  --dark: #0b1220;
-  --card: #162033;
-  --text: #e8ecf7;
+const searchInput = document.getElementById('search');
+const resultsDiv = document.getElementById('results');
+const modal = document.getElementById('detailModal');
+const modalBody = document.getElementById('modalBody');
+const closeBtn = document.querySelector('.close');
+
+loadData();
+
+document.querySelectorAll('.tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    tab.classList.add('active');
+    currentTab = tab.dataset.tab;
+    searchInput.value = '';
+    
+    // Ocultar barra de búsqueda si estamos en Créditos
+    if (currentTab === 'creditos') {
+      searchInput.style.display = 'none';
+    } else {
+      searchInput.style.display = 'block';
+    }
+    
+    renderCurrentTab();
+  });
+});
+
+searchInput.addEventListener('input', () => {
+  const term = searchInput.value.toLowerCase().trim();
+  filterCurrentTab(term);
+});
+
+closeBtn.addEventListener('click', () => modal.style.display = 'none');
+window.addEventListener('click', e => {
+  if (e.target === modal) modal.style.display = 'none';
+});
+
+function renderCurrentTab() {
+  if (currentTab === 'pokemon') renderResults(pokemonData);
+  else if (currentTab === 'objetos') renderObjects(objetosData);
+  else renderCreditsAndChangelog();
 }
 
-body {
-  font-family: 'Poppins', sans-serif;
-  background: 
-    radial-gradient(circle at top left, #00c85333, transparent 35%),
-    radial-gradient(circle at bottom right, #00b14033, transparent 30%),
-    linear-gradient(135deg, #07111d, #111827);
-  min-height: 100vh;
-  color: var(--text);
-  overflow-x: hidden;
+function filterCurrentTab(term) {
+  if (!term) return renderCurrentTab();
+  
+  if (currentTab === 'pokemon') {
+    const filtered = pokemonData.filter(p => Object.values(p).join(' ').toLowerCase().includes(term));
+    renderResults(filtered);
+  } else if (currentTab === 'objetos') {
+    const filtered = objetosData.filter(o => Object.values(o).join(' ').toLowerCase().includes(term));
+    renderObjects(filtered);
+  }
 }
 
-/* Contenedor Principal */
-.container {
-  width: 100%;
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 40px 20px;
+function renderResults(pokemons) {
+  resultsDiv.innerHTML = '';
+  if (pokemons.length === 0) {
+    resultsDiv.innerHTML = '<p style="grid-column:1/-1;text-align:center;color:#aaa;">No se encontraron Pokémon</p>';
+    return;
+  }
+  pokemons.forEach(p => {
+    const card = document.createElement('div');
+    card.className = 'card';
+    const type1 = p.field6 || '';
+    const type2 = p.field8 || '';
+    card.innerHTML = `
+      <img src="${p.field5}" alt="${p.field2}">
+      <h3>#${p.field4} ${p.field2}</h3>
+      <div class="types">
+        <span class="type" style="background:${typeColors[type1]||'#666'}">
+          <img src="${p.field7}" alt="${type1}">
+        </span>
+        ${type2 ? `<span class="type" style="background:${typeColors[type2]||'#666'}">
+          <img src="${p.field9}" alt="${type2}">
+        </span>` : ''}
+      </div>
+    `;
+    card.addEventListener('click', () => showPokemonDetail(p));
+    resultsDiv.appendChild(card);
+  });
 }
 
-/* ================== HERO ================== */
-.hero { 
-  text-align: center; 
-  margin-bottom: 35px; 
+function renderObjects(objetos) {
+  resultsDiv.innerHTML = '';
+  if (objetos.length === 0) {
+    resultsDiv.innerHTML = '<p style="grid-column:1/-1;text-align:center;color:#aaa;">No se encontraron Objetos</p>';
+    return;
+  }
+  objetos.forEach(o => {
+    const card = document.createElement('div');
+    card.className = 'card';
+    card.innerHTML = `
+      <img src="${o.field5}" alt="${o.field3}" style="width:110px;height:110px;">
+      <h3>#${o.field2} ${o.field3}</h3>
+      <p style="font-size:0.9em; margin:8px 0 4px 0; color:#ccc;">${o.field6 ? o.field6.substring(0, 80) + '...' : ''}</p>
+      <p style="font-size:0.85em;color:#aaa;">
+        <strong>Compra:</strong> ${o.field8} | <strong>Venta:</strong> ${o.field7}
+      </p>
+    `;
+    card.addEventListener('click', () => showObjectDetail(o));
+    resultsDiv.appendChild(card);
+  });
 }
 
-.logo-circle {
-  width: 90px; 
-  height: 90px;
-  margin: auto; 
-  margin-bottom: 20px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, #00c853, #64dd17);
-  display: flex; 
-  justify-content: center; 
-  align-items: center;
-  box-shadow: 0 0 30px rgba(0, 200, 83, 0.5);
+function renderCreditsAndChangelog() {
+  // Ocupa todo el ancho de la grid usando estilos inline sencillos y limpios
+  resultsDiv.innerHTML = `
+    <div style="grid-column: 1 / -1; display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; margin-top: 20px;">
+      
+      <div class="card" style="text-align: left; cursor: default; height: fit-content;">
+        <h2 style="color: var(--green); margin-bottom: 20px; border-bottom: 2px solid rgba(0,200,83,0.2); padding-bottom: 8px;">👥 Créditos del Proyecto</h2>
+        <div style="display: flex; flex-direction: column; gap: 16px;">
+          ${infoExtra.creditos.map(c => `
+            <div>
+              <p style="font-size: 0.85em; color: #aaa; text-transform: uppercase; letter-spacing: 1px;">${c.rol}</p>
+              <p style="font-size: 1.1em; font-weight: 500; color: #fff;">
+                ${c.link !== '#' ? `<a href="${c.link}" target="_blank" style="color: #64dd17; text-decoration: none; border-bottom: 1px dashed;">${c.nombre}</a>` : c.nombre}
+              </p>
+            </div>
+          `).join('')}
+        </div>
+      </div>
+
+      <div class="card" style="text-align: left; cursor: default;">
+        <h2 style="color: var(--green); margin-bottom: 20px; border-bottom: 2px solid rgba(0,200,83,0.2); padding-bottom: 8px;">⏳ Historial de Cambios</h2>
+        <div style="display: flex; flex-direction: column; gap: 24px;">
+          ${infoExtra.changelog.map(ch => `
+            <div style="border-left: 3px solid var(--green); padding-left: 15px;">
+              <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 8px;">
+                <strong style="font-size: 1.2rem; color: #fff;">${ch.version}</strong>
+                <span style="font-size: 0.85em; color: #aaa;">${ch.fecha}</span>
+              </div>
+              <ul style="padding-left: 18px; color: #ced4da; font-size: 0.95em; display: flex; flex-direction: column; gap: 6px;">
+                ${ch.cambios.map(cambio => `<li>${cambio}</li>`).join('')}
+              </ul>
+            </div>
+          `).join('')}
+        </div>
+      </div>
+
+    </div>
+  `;
 }
 
-.hero h1 {
-  font-size: 3.2rem;
-  font-weight: 700;
-  letter-spacing: 2px;
-}
-.hero h1 span { color: var(--green); }
+function showPokemonDetail(p) {
+  const stats = [
+    {name: "PS", value: p.field10, color: "#FF5959"},
+    {name: "Ataque", value: p.field11, color: "#F5AC78"},
+    {name: "Defensa", value: p.field12, color: "#FAE078"},
+    {name: "At. Especial", value: p.field13, color: "#9DB7F5"},
+    {name: "Def. Especial", value: p.field14, color: "#A7DB8D"},
+    {name: "Velocidad", value: p.field15, color: "#FA92B2"}
+  ];
 
-.subtitle {
-  color: #aaa;
-  font-size: 0.95rem;
-  margin-top: 5px;
-}
+  // Color del tipo principal para el banner
+  const bannerColor = typeColors[p.field6] || '#00c853';
 
-/* BUSCADOR */
-.search-input {
-  width: 100%;
-  padding: 18px 22px;
-  border: none;
-  outline: none;
-  border-radius: 20px;
-  background: rgba(255,255,255,.05);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  color: white;
-  font-size: 16px;
-  border: 1px solid rgba(255,255,255,.08);
-  margin-bottom: 25px;
-  transition: all 0.3s ease;
-}
-.search-input:focus {
-  border-color: var(--green);
-  box-shadow: 0 0 25px rgba(0, 200, 83, .3);
-}
+  let statsHtml = '';
+  stats.forEach(stat => {
+    const value = parseInt(stat.value) || 0;
+    const percent = Math.min(100, (value / 255) * 100);
+    statsHtml += `
+      <div>
+        <div style="display:flex; justify-content:space-between; font-size: 0.9em;">
+          <span style="color: #aaa;">${stat.name}</span>
+          <strong style="color: #fff;">${value}</strong>
+        </div>
+        <div class="stats-bar">
+          <div class="stats-fill" style="width:${percent}%; --stat-color: ${stat.color};"></div>
+        </div>
+      </div>
+    `;
+  });
 
-/* TABS */
-.tabs {
-  display: flex;
-  justify-content: center;
-  gap: 15px;
-  margin-bottom: 25px;
-}
-.tab {
-  border: none;
-  cursor: pointer;
-  padding: 12px 26px;
-  border-radius: 999px;
-  background: rgba(255,255,255,.05);
-  color: white;
-  transition: .3s;
-  font-family: inherit;
-}
-.tab.active {
-  background: linear-gradient(90deg, #00c853, #64dd17);
-  color: #111827;
-  font-weight: 600;
-}
+  // Buscar sprites de los objetos que porta el Pokémon
+  const obj1 = p.field22 ? objetosData.find(o => o.field3 && o.field3.toLowerCase() === p.field22.toLowerCase()) : null;
+  const obj2 = p.field23 ? objetosData.find(o => o.field3 && o.field3.toLowerCase() === p.field23.toLowerCase()) : null;
 
-/* GRID */
-.results-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-  gap: 24px;
-}
+  const renderItemSprite = (nombre, objData) => {
+    if (!nombre) return '';
+    const spriteHtml = objData ? `<img src="${objData.field5}" alt="${nombre}" style="width:24px;height:24px;image-rendering:pixelated;vertical-align:middle;margin-right:4px;">` : '';
+    return `${spriteHtml}${nombre}`;
+  };
 
-/* TARJETAS */
-.card {
-  position: relative;
-  overflow: hidden;
-  border-radius: 24px;
-  background: linear-gradient(145deg, rgba(255,255,255,.05), rgba(255,255,255,.01));
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(255,255,255,.08);
-  padding: 24px;
-  text-align: center;
-  cursor: pointer;
-  transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
-}
-.card:hover {
-  transform: translateY(-8px);
-  border-color: rgba(0, 200, 83, 0.4);
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), 0 0 30px rgba(0, 200, 83, 0.15);
-}
-.card img {
-  image-rendering: pixelated;
-  transition: .3s;
-}
-.card:hover img { 
-  transform: scale(1.12); 
-}
-.card h3 {
-  margin-top: 12px;
-  color: var(--green);
-  font-size: 1.05rem;
-}
+  const html = `
+    <!-- BANNER SUPERIOR con nombre y número -->
+    <div style="
+      padding: 20px 60px 18px 24px;
+      background: linear-gradient(135deg, ${bannerColor}33, ${bannerColor}15);
+      border-bottom: 2px solid ${bannerColor}55;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      flex-wrap: wrap;
+      min-height: 78px;
+    ">
+      <img src="${p.field16}" alt="${p.field2}" style="width:38px;height:38px;image-rendering:pixelated;flex-shrink:0;">
+      <div style="flex-shrink:0;">
+        <span style="font-size:0.75em;color:${bannerColor};font-weight:600;letter-spacing:2px;text-transform:uppercase;display:block;">#${p.field4}</span>
+        <h2 style="font-size:1.6rem;font-weight:700;line-height:1.1;color:#fff;white-space:nowrap;">${p.field2}</h2>
+      </div>
+      <div style="margin-left:auto;display:flex;gap:8px;align-items:center;flex-wrap:wrap;justify-content:flex-end;">
+        <span class="type" style="background:${typeColors[p.field6]||'#666'}; box-shadow: 0 4px 10px rgba(0,0,0,0.3); font-size:0.85em; white-space:nowrap;">
+          <img src="${p.field7}" width="15" height="15" style="vertical-align:middle;"> ${p.field6}
+        </span>
+        ${p.field8 ? `<span class="type" style="background:${typeColors[p.field8]||'#666'}; box-shadow: 0 4px 10px rgba(0,0,0,0.3); font-size:0.85em; white-space:nowrap;">
+          <img src="${p.field9}" width="15" height="15" style="vertical-align:middle;"> ${p.field8}
+        </span>` : ''}
+      </div>
+    </div>
 
-/* TIPOS */
-.card .types {
-  display: flex;
-  justify-content: center;
-  flex-wrap: wrap;
-  gap: 12px;
-  margin-top: 12px;
-}
-.card .type {
-  background: none !important;
-  padding: 0;
-}
-.card .type img {
-  width: 34px;
-  height: 34px;
-}
+    <!-- CUERPO -->
+    <div class="modal-inner">
 
-/* ================== MODAL ================== */
-.modal {
-  display: none;
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,.85);
-  z-index: 1000;
-  overflow-y: auto;
-  padding: 20px;
-  backdrop-filter: blur(4px);
-}
+    <!-- CUERPO PRINCIPAL: izquierda sprite | derecha info -->
+    <div style="display:grid; grid-template-columns: 200px 1fr; gap: 24px; margin-top: 8px;">
 
-.modal-content {
-  background: linear-gradient(145deg, #17253f, #0d1525);
-  width: 100%;
-  max-width: 860px;
-  margin: 40px auto;
-  padding: 0;
-  border-radius: 28px;
-  position: relative;
-  border: 1px solid rgba(255,255,255,.08);
-  overflow: hidden;
-}
+      <!-- COLUMNA IZQUIERDA: sprite normal -->
+      <div style="display:flex; flex-direction:column; gap:16px;">
 
-.modal-inner {
-  padding: 28px;
-}
+        <!-- Sprite normal -->
+        <div style="
+          background: rgba(255,255,255,0.04);
+          border: 1px solid rgba(255,255,255,0.08);
+          border-radius: 18px;
+          padding: 16px;
+          text-align:center;
+        ">
+          <p style="font-size:0.7em;color:#aaa;text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;">Normal</p>
+          <img src="${p.field5}" alt="${p.field2}" style="width:150px;height:150px;image-rendering:pixelated;">
+        </div>
 
-.close {
-  position: absolute;
-  top: 14px;
-  right: 20px;
-  font-size: 32px;
-  color: rgba(255,255,255,0.7);
-  cursor: pointer;
-  transition: color 0.2s;
-  line-height: 1;
-  z-index: 10;
-}
-.close:hover { color: white; }
+      </div>
 
-#modalBody {
-  max-height: 80vh;
-  overflow-y: auto;
+      <!-- COLUMNA DERECHA: datos + stats -->
+      <div style="display:flex;flex-direction:column;gap:22px;">
+
+        <!-- Datos del Pokémon -->
+        <div style="
+          background: rgba(255,255,255,0.03);
+          border: 1px solid rgba(0,200,83,0.2);
+          border-radius: 18px;
+          padding: 20px;
+        ">
+          <h3 style="color:var(--green);margin-bottom:14px;font-size:1rem;border-bottom:1px solid rgba(0,200,83,0.15);padding-bottom:8px;">📝 Datos del Pokémon</h3>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;font-size:0.88em;color:#e8ecf7;">
+            <p><strong style="color:#aaa;">🏷️ Categoría</strong><br>${p.field17 || '-'}</p>
+            <p><strong style="color:#aaa;">📏 Altura</strong><br>${p.field18 || '-'}</p>
+            <p><strong style="color:#aaa;">⚖️ Peso</strong><br>${p.field19 || '-'}</p>
+            <p><strong style="color:#aaa;">🎯 Captura</strong><br>${p.field20 || '-'}</p>
+            <p><strong style="color:#aaa;">📈 Crecimiento</strong><br>${p.field21 || '-'}</p>
+            <p><strong style="color:#aaa;">🥚 Grupo Huevo</strong><br>${p.field27 || '-'}${p.field28 ? ` / ${p.field28}` : ''}</p>
+            <p style="grid-column:1/-1;"><strong style="color:#aaa;">🧬 Habilidades</strong><br>
+              <span style="color:#00c853;">${p.field24 || '-'}</span>
+              ${p.field25 ? ` / ${p.field25}` : ''}
+              ${p.field26 ? ` / <em style="color:#ff80ab;">${p.field26} (Oculta)</em>` : ''}
+            </p>
+            ${p.field22 ? `<p style="grid-column:1/-1;"><strong style="color:#aaa;">🎒 Objetos</strong><br>
+              <span style="display:inline-flex;align-items:center;gap:6px;flex-wrap:wrap;">
+                <span style="display:inline-flex;align-items:center;gap:4px;">${renderItemSprite(p.field22, obj1)}</span>
+                ${p.field23 ? `<span style="color:#555;">/</span><span style="display:inline-flex;align-items:center;gap:4px;">${renderItemSprite(p.field23, obj2)}</span>` : ''}
+              </span>
+            </p>` : ''}
+          </div>
+        </div>
+
+        <!-- Estadísticas Base -->
+        <div style="
+          background: rgba(255,255,255,0.03);
+          border: 1px solid rgba(255,255,255,0.08);
+          border-radius: 18px;
+          padding: 20px;
+        ">
+          <h3 style="color:var(--green);margin-bottom:14px;font-size:1rem;border-bottom:1px solid rgba(0,200,83,0.15);padding-bottom:8px;">📊 Estadísticas Base</h3>
+          <div style="display:flex;flex-direction:column;gap:12px;">
+            ${statsHtml}
+          </div>
+        </div>
+
+      </div>
+    </div>
+    </div><!-- end modal-inner -->
+  `;
+
+  modalBody.innerHTML = html;
+  modal.style.display = 'block';
 }
 
-#modalBody img.main-sprite {
-  width: 240px;
-  height: 240px;
-  image-rendering: pixelated;
-  display: block;
-  margin: 0 auto 15px;
-}
+function showObjectDetail(o) {
+  const html = `
+    <!-- BANNER SUPERIOR -->
+    <div style="
+      padding: 20px 60px 18px 24px;
+      background: linear-gradient(135deg, rgba(0,200,83,0.2), rgba(0,200,83,0.08));
+      border-bottom: 2px solid rgba(0,200,83,0.3);
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      flex-wrap: wrap;
+      min-height: 78px;
+    ">
+      <img src="${o.field5}" alt="${o.field3}" style="width:44px;height:44px;image-rendering:pixelated;flex-shrink:0;">
+      <div>
+        <span style="font-size:0.75em;color:#00c853;font-weight:600;letter-spacing:2px;text-transform:uppercase;display:block;">#${o.field2}</span>
+        <h2 style="font-size:1.6rem;font-weight:700;line-height:1.1;color:#fff;">${o.field3}</h2>
+      </div>
+    </div>
 
-#modalBody .type {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 10px 20px;
-  border-radius: 999px;
-  color: white;
-  margin: 5px;
-  font-size: 1.05em;
-  font-weight: 500;
-}
+    <div class="modal-inner">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:8px;">
 
-/* Barras de estadísticas mejoradas */
-.stats-bar {
-  height: 12px;
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 6px;
-  overflow: hidden;
-  margin-top: 6px;
-}
-.stats-fill {
-  height: 100%;
-  border-radius: 6px;
-  background: var(--stat-color, #64dd17);
-  transition: width 1s cubic-bezier(0.4, 0, 0.2, 1);
-}
+      <!-- Sprite grande + precios -->
+      <div style="display:flex;flex-direction:column;gap:16px;">
+        <div style="
+          background: rgba(255,255,255,0.04);
+          border: 1px solid rgba(255,255,255,0.08);
+          border-radius: 18px;
+          padding: 20px;
+          text-align:center;
+        ">
+          <img src="${o.field5}" alt="${o.field3}" style="width:120px;height:120px;image-rendering:pixelated;">
+        </div>
+        <div style="
+          background: rgba(255,255,255,0.03);
+          border: 1px solid rgba(255,255,255,0.08);
+          border-radius: 18px;
+          padding: 18px;
+        ">
+          <h3 style="color:var(--green);margin-bottom:12px;font-size:0.95rem;border-bottom:1px solid rgba(0,200,83,0.15);padding-bottom:6px;">💰 Precios</h3>
+          <p style="font-size:0.95em;color:#e8ecf7;margin-bottom:8px;"><strong style="color:#aaa;">Compra:</strong> ${o.field8 || '-'}</p>
+          <p style="font-size:0.95em;color:#e8ecf7;"><strong style="color:#aaa;">Venta:</strong> ${o.field7 || '-'}</p>
+        </div>
+      </div>
 
-/* Scrollbar personalizado para el modal */
-#modalBody::-webkit-scrollbar {
-  width: 8px;
-}
-#modalBody::-webkit-scrollbar-track {
-  background: rgba(255, 255, 255, 0.03);
-  border-radius: 10px;
-}
-#modalBody::-webkit-scrollbar-thumb {
-  background: rgba(0, 200, 83, 0.3);
-  border-radius: 10px;
-}
-#modalBody::-webkit-scrollbar-thumb:hover {
-  background: rgba(0, 200, 83, 0.6);
-}
+      <!-- Descripción -->
+      <div style="
+        background: rgba(255,255,255,0.03);
+        border: 1px solid rgba(0,200,83,0.2);
+        border-radius: 18px;
+        padding: 20px;
+      ">
+        <h3 style="color:var(--green);margin-bottom:12px;font-size:0.95rem;border-bottom:1px solid rgba(0,200,83,0.15);padding-bottom:6px;">📖 Descripción</h3>
+        <p style="color:#e8ecf7;line-height:1.7;font-size:0.92em;">${o.field6 || 'Sin descripción'}</p>
+      </div>
 
-/* Responsive */
-@media (max-width: 700px) {
-  .hero h1 { font-size: 2.2rem; }
-  .results-grid { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); }
-  .modal-content { margin: 10px auto; }
-  .modal-inner { padding: 16px; }
+    </div>
+    </div><!-- end modal-inner -->
+  `;
+  modalBody.innerHTML = html;
+  modal.style.display = 'block';
 }

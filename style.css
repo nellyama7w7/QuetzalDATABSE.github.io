@@ -179,29 +179,33 @@ body {
   width: 100%;
   max-width: 860px;
   margin: 40px auto;
-  padding: 35px;
+  padding: 0;
   border-radius: 28px;
   position: relative;
   border: 1px solid rgba(255,255,255,.08);
   overflow: hidden;
 }
 
+.modal-inner {
+  padding: 28px;
+}
+
 .close {
   position: absolute;
-  top: 20px;
-  right: 30px;
-  font-size: 36px;
-  color: var(--green);
+  top: 14px;
+  right: 20px;
+  font-size: 32px;
+  color: rgba(255,255,255,0.7);
   cursor: pointer;
   transition: color 0.2s;
   line-height: 1;
+  z-index: 10;
 }
 .close:hover { color: white; }
 
 #modalBody {
-  max-height: 75vh;
+  max-height: 80vh;
   overflow-y: auto;
-  padding-right: 15px;
 }
 
 #modalBody img.main-sprite {
@@ -259,9 +263,6 @@ body {
 @media (max-width: 700px) {
   .hero h1 { font-size: 2.2rem; }
   .results-grid { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); }
-  .modal-content { padding: 20px; margin: 10px auto; }
-  /* Colapsar grid del modal detail a una columna en móvil */
-  #modalBody .detail-grid {
-    grid-template-columns: 1fr !important;
-  }
+  .modal-content { margin: 10px auto; }
+  .modal-inner { padding: 16px; }
 }
