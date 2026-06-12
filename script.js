@@ -197,9 +197,6 @@ function showPokemonDetail(p) {
     {name: "Velocidad", value: p.field15, color: "#FA92B2"}
   ];
 
-  // Sprite shiny: reemplazar el path del sprite normal por la versión shiny
-  const shinyUrl = p.field5 ? p.field5.replace('/PokemonSprites/', '/ShinySprites/') : '';
-
   // Color del tipo principal para el banner
   const bannerColor = typeColors[p.field6] || '#00c853';
 
@@ -220,37 +217,49 @@ function showPokemonDetail(p) {
     `;
   });
 
+  // Buscar sprites de los objetos que porta el Pokémon
+  const obj1 = p.field22 ? objetosData.find(o => o.field3 && o.field3.toLowerCase() === p.field22.toLowerCase()) : null;
+  const obj2 = p.field23 ? objetosData.find(o => o.field3 && o.field3.toLowerCase() === p.field23.toLowerCase()) : null;
+
+  const renderItemSprite = (nombre, objData) => {
+    if (!nombre) return '';
+    const spriteHtml = objData ? `<img src="${objData.field5}" alt="${nombre}" style="width:22px;height:22px;image-rendering:pixelated;vertical-align:middle;margin-right:4px;">` : '';
+    return `${spriteHtml}${nombre}`;
+  };
+
   const html = `
     <!-- BANNER SUPERIOR con nombre y número -->
     <div style="
       margin: -35px -35px 0 -35px;
-      padding: 22px 35px;
+      padding: 16px 28px;
       background: linear-gradient(135deg, ${bannerColor}33, ${bannerColor}15);
       border-bottom: 2px solid ${bannerColor}55;
       border-radius: 28px 28px 0 0;
       display: flex;
       align-items: center;
-      gap: 16px;
+      gap: 14px;
+      flex-wrap: wrap;
+      min-height: 72px;
     ">
-      <img src="${p.field16}" alt="${p.field2}" style="width:40px;height:40px;image-rendering:pixelated;">
-      <div>
-        <span style="font-size:0.8em;color:${bannerColor};font-weight:600;letter-spacing:2px;text-transform:uppercase;">#${p.field4}</span>
-        <h2 style="font-size:1.9rem;font-weight:700;line-height:1.1;color:#fff;">${p.field2}</h2>
+      <img src="${p.field16}" alt="${p.field2}" style="width:38px;height:38px;image-rendering:pixelated;flex-shrink:0;">
+      <div style="flex-shrink:0;">
+        <span style="font-size:0.75em;color:${bannerColor};font-weight:600;letter-spacing:2px;text-transform:uppercase;display:block;">#${p.field4}</span>
+        <h2 style="font-size:1.6rem;font-weight:700;line-height:1.1;color:#fff;white-space:nowrap;">${p.field2}</h2>
       </div>
-      <div style="margin-left:auto;display:flex;gap:8px;align-items:center;">
-        <span class="type" style="background:${typeColors[p.field6]||'#666'}; box-shadow: 0 4px 10px rgba(0,0,0,0.3); font-size:0.9em;">
-          <img src="${p.field7}" width="16" height="16" style="vertical-align:middle;"> ${p.field6}
+      <div style="margin-left:auto;display:flex;gap:8px;align-items:center;flex-wrap:wrap;justify-content:flex-end;">
+        <span class="type" style="background:${typeColors[p.field6]||'#666'}; box-shadow: 0 4px 10px rgba(0,0,0,0.3); font-size:0.85em; white-space:nowrap;">
+          <img src="${p.field7}" width="15" height="15" style="vertical-align:middle;"> ${p.field6}
         </span>
-        ${p.field8 ? `<span class="type" style="background:${typeColors[p.field8]||'#666'}; box-shadow: 0 4px 10px rgba(0,0,0,0.3); font-size:0.9em;">
-          <img src="${p.field9}" width="16" height="16" style="vertical-align:middle;"> ${p.field8}
+        ${p.field8 ? `<span class="type" style="background:${typeColors[p.field8]||'#666'}; box-shadow: 0 4px 10px rgba(0,0,0,0.3); font-size:0.85em; white-space:nowrap;">
+          <img src="${p.field9}" width="15" height="15" style="vertical-align:middle;"> ${p.field8}
         </span>` : ''}
       </div>
     </div>
 
-    <!-- CUERPO PRINCIPAL: izquierda sprites | derecha info -->
-    <div style="display:grid; grid-template-columns: 220px 1fr; gap: 28px; margin-top: 28px;">
+    <!-- CUERPO PRINCIPAL: izquierda sprite | derecha info -->
+    <div style="display:grid; grid-template-columns: 200px 1fr; gap: 24px; margin-top: 24px;">
 
-      <!-- COLUMNA IZQUIERDA: sprite normal + shiny + estadísticas -->
+      <!-- COLUMNA IZQUIERDA: sprite normal -->
       <div style="display:flex; flex-direction:column; gap:16px;">
 
         <!-- Sprite normal -->
@@ -261,22 +270,8 @@ function showPokemonDetail(p) {
           padding: 16px;
           text-align:center;
         ">
-          <p style="font-size:0.7em;color:#aaa;text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;">Normal</p>
-          <img src="${p.field5}" alt="${p.field2}" style="width:130px;height:130px;image-rendering:pixelated;">
-        </div>
-
-        <!-- Sprite shiny -->
-        <div style="
-          background: rgba(255,215,0,0.04);
-          border: 1px solid rgba(255,215,0,0.15);
-          border-radius: 18px;
-          padding: 16px;
-          text-align:center;
-        ">
-          <p style="font-size:0.7em;color:#ffd700;text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;">✨ Shiny</p>
-          <img src="${shinyUrl}" alt="${p.field2} shiny"
-            style="width:130px;height:130px;image-rendering:pixelated;"
-            onerror="this.style.opacity='0.3'; this.src='${p.field5}';">
+          <p style="font-size:0.7em;color:#aaa;text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;">Normal</p>
+          <img src="${p.field5}" alt="${p.field2}" style="width:150px;height:150px;image-rendering:pixelated;">
         </div>
 
       </div>
@@ -304,7 +299,12 @@ function showPokemonDetail(p) {
               ${p.field25 ? ` / ${p.field25}` : ''}
               ${p.field26 ? ` / <em style="color:#ff80ab;">${p.field26} (Oculta)</em>` : ''}
             </p>
-            ${p.field22 ? `<p style="grid-column:1/-1;"><strong style="color:#aaa;">🎒 Objetos</strong><br>${p.field22}${p.field23 ? ` / ${p.field23}` : ''}</p>` : ''}
+            ${p.field22 ? `<p style="grid-column:1/-1;"><strong style="color:#aaa;">🎒 Objetos</strong><br>
+              <span style="display:inline-flex;align-items:center;gap:6px;flex-wrap:wrap;">
+                <span style="display:inline-flex;align-items:center;gap:4px;">${renderItemSprite(p.field22, obj1)}</span>
+                ${p.field23 ? `<span style="color:#555;">/</span><span style="display:inline-flex;align-items:center;gap:4px;">${renderItemSprite(p.field23, obj2)}</span>` : ''}
+              </span>
+            </p>` : ''}
           </div>
         </div>
 
@@ -331,18 +331,62 @@ function showPokemonDetail(p) {
 
 function showObjectDetail(o) {
   const html = `
-    <div style="text-align:center;">
-      <img src="${o.field5}" style="width:180px; height:180px; image-rendering:pixelated; margin-bottom: 15px;">
-      <h2 style="font-size: 2rem; font-weight: 700;">#${o.field2} ${o.field3}</h2>
+    <!-- BANNER SUPERIOR -->
+    <div style="
+      margin: -35px -35px 0 -35px;
+      padding: 16px 28px;
+      background: linear-gradient(135deg, rgba(0,200,83,0.2), rgba(0,200,83,0.08));
+      border-bottom: 2px solid rgba(0,200,83,0.3);
+      border-radius: 28px 28px 0 0;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      flex-wrap: wrap;
+      min-height: 72px;
+    ">
+      <img src="${o.field5}" alt="${o.field3}" style="width:44px;height:44px;image-rendering:pixelated;flex-shrink:0;">
+      <div>
+        <span style="font-size:0.75em;color:#00c853;font-weight:600;letter-spacing:2px;text-transform:uppercase;display:block;">#${o.field2}</span>
+        <h2 style="font-size:1.6rem;font-weight:700;line-height:1.1;color:#fff;">${o.field3}</h2>
+      </div>
     </div>
-    <div style="margin-top: 25px;">
-      <h3 style="color: var(--green); margin-bottom: 10px; border-bottom: 2px solid rgba(0,200,83,0.2); padding-bottom: 6px;">📖 Descripción</h3>
-      <p style="color: #e8ecf7; line-height: 1.6; font-size: 0.95em;">${o.field6 || 'Sin descripción'}</p>
-    </div>
-    <div style="margin-top: 25px;">
-      <h3 style="color: var(--green); margin-bottom: 10px; border-bottom: 2px solid rgba(0,200,83,0.2); padding-bottom: 6px;">💰 Precios</h3>
-      <p style="font-size: 0.95em; color: #e8ecf7;"><strong style="color: #aaa;">Compra:</strong> ${o.field8 || '-'} pokedólares</p>
-      <p style="font-size: 0.95em; color: #e8ecf7; margin-top: 6px;"><strong style="color: #aaa;">Venta:</strong> ${o.field7 || '-'} pokedólares</p>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:24px;">
+
+      <!-- Sprite grande + precios -->
+      <div style="display:flex;flex-direction:column;gap:16px;">
+        <div style="
+          background: rgba(255,255,255,0.04);
+          border: 1px solid rgba(255,255,255,0.08);
+          border-radius: 18px;
+          padding: 20px;
+          text-align:center;
+        ">
+          <img src="${o.field5}" alt="${o.field3}" style="width:120px;height:120px;image-rendering:pixelated;">
+        </div>
+        <div style="
+          background: rgba(255,255,255,0.03);
+          border: 1px solid rgba(255,255,255,0.08);
+          border-radius: 18px;
+          padding: 18px;
+        ">
+          <h3 style="color:var(--green);margin-bottom:12px;font-size:0.95rem;border-bottom:1px solid rgba(0,200,83,0.15);padding-bottom:6px;">💰 Precios</h3>
+          <p style="font-size:0.95em;color:#e8ecf7;margin-bottom:8px;"><strong style="color:#aaa;">Compra:</strong> ${o.field8 || '-'}</p>
+          <p style="font-size:0.95em;color:#e8ecf7;"><strong style="color:#aaa;">Venta:</strong> ${o.field7 || '-'}</p>
+        </div>
+      </div>
+
+      <!-- Descripción -->
+      <div style="
+        background: rgba(255,255,255,0.03);
+        border: 1px solid rgba(0,200,83,0.2);
+        border-radius: 18px;
+        padding: 20px;
+      ">
+        <h3 style="color:var(--green);margin-bottom:12px;font-size:0.95rem;border-bottom:1px solid rgba(0,200,83,0.15);padding-bottom:6px;">📖 Descripción</h3>
+        <p style="color:#e8ecf7;line-height:1.7;font-size:0.92em;">${o.field6 || 'Sin descripción'}</p>
+      </div>
+
     </div>
   `;
   modalBody.innerHTML = html;
