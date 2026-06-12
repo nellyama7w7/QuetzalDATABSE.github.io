@@ -10,6 +10,7 @@ const infoExtra = {
     { rol: "Creador de Pokémon Quetzal", nombre: "TenmaRH", link: "#" }
   ],
   changelog: [
+    { version: "v1.2", fecha: "11 de Junio, 2026", cambios: ["Se rediseñó el modal de detalle con header dinámico por tipo.", "Se eliminó el slot Shiny del modal de Pokémon.", "Se añaden sprites de objetos en la sección de objetos portados.", "Se corrigió el header del modal para que no quede cortado por el borde.", "Se aplicó el mismo diseño de header al modal de Objetos."] },
     { version: "v1.1", fecha: "10 de Junio, 2026", cambios: ["Se agregó la pestaña de créditos.", "Se rediseñó el modal de detalles.", "Se separó el ratio de captura del crecimiento para mejor lectura."] },
     { version: "v1.0", fecha: "09 de Junio, 2026", cambios: ["Lanzamiento inicial de la base de datos.", "Buscador funcional de Pokémon y Objetos."] }
   ]
