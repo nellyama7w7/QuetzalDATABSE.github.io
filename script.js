@@ -223,7 +223,7 @@ function showPokemonDetail(p) {
 
   const renderItemSprite = (nombre, objData) => {
     if (!nombre) return '';
-    const spriteHtml = objData ? `<img src="${objData.field5}" alt="${nombre}" style="width:22px;height:22px;image-rendering:pixelated;vertical-align:middle;margin-right:4px;">` : '';
+    const spriteHtml = objData ? `<img src="${objData.field5}" alt="${nombre}" style="width:24px;height:24px;image-rendering:pixelated;vertical-align:middle;margin-right:4px;">` : '';
     return `${spriteHtml}${nombre}`;
   };
 
@@ -231,7 +231,7 @@ function showPokemonDetail(p) {
     <!-- BANNER SUPERIOR con nombre y número -->
     <div style="
       margin: -35px -35px 0 -35px;
-      padding: 16px 28px;
+      padding: 28px 28px 16px 28px;
       background: linear-gradient(135deg, ${bannerColor}33, ${bannerColor}15);
       border-bottom: 2px solid ${bannerColor}55;
       border-radius: 28px 28px 0 0;
@@ -239,7 +239,7 @@ function showPokemonDetail(p) {
       align-items: center;
       gap: 14px;
       flex-wrap: wrap;
-      min-height: 72px;
+      min-height: 80px;
     ">
       <img src="${p.field16}" alt="${p.field2}" style="width:38px;height:38px;image-rendering:pixelated;flex-shrink:0;">
       <div style="flex-shrink:0;">
