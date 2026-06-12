@@ -1,0 +1,551 @@
+[
+  {
+    "field2": "Habilidad",
+    "field3": "Descripcion"
+  },
+  {
+    "field2": "Espesura",
+    "field3": "Sube Planta bajos PS."
+  },
+  {
+    "field2": "Clorofila",
+    "field3": "Duplica Vel. en sol."
+  },
+  {
+    "field2": "Sebo",
+    "field3": "Reduce Hielo y Fuego."
+  },
+  {
+    "field2": "Mar Llamas",
+    "field3": "Sube Fuego bajos PS."
+  },
+  {
+    "field2": "Poder Solar",
+    "field3": "Sube At. Esp. en sol."
+  },
+  {
+    "field2": "Garra Dura",
+    "field3": "Sube mov. de contacto."
+  },
+  {
+    "field2": "Sequia",
+    "field3": "Provoca sol."
+  },
+  {
+    "field2": "Torrente",
+    "field3": "Sube Agua bajos PS."
+  },
+  {
+    "field2": "Cura Lluvia",
+    "field3": "Recupera PS en lluvia."
+  },
+  {
+    "field2": "Megadisparador",
+    "field3": "Potencia mov. pulso."
+  },
+  {
+    "field2": "Polvo Escudo",
+    "field3": "Inmune efectos sec."
+  },
+  {
+    "field2": "Fuga",
+    "field3": "100% huida PKM salvajes."
+  },
+  {
+    "field2": "Mudar",
+    "field3": "Puede curar estado."
+  },
+  {
+    "field2": "Ojo Compuesto",
+    "field3": "Sube precision."
+  },
+  {
+    "field2": "Cromolente",
+    "field3": "Sube daño no eficaz."
+  },
+  {
+    "field2": "Enjambre",
+    "field3": "Sube Bicho bajos PS.",
+    "field4": "70"
+  },
+  {
+    "field2": "Francotirador",
+    "field3": "Potencia golpes criticos."
+  },
+  {
+    "field2": "Adaptable",
+    "field3": "Sube mov. mismo tipo."
+  },
+  {
+    "field2": "Vista Lince",
+    "field3": "Impide bajada Prec."
+  },
+  {
+    "field2": "Tumbos",
+    "field3": "Sube Eva. si confuso."
+  },
+  {
+    "field2": "Sacapecho",
+    "field3": "Impide bajada de Defensa."
+  },
+  {
+    "field2": "Indefenso",
+    "field3": "Mov. siempre aciertan."
+  },
+  {
+    "field2": "Agallas",
+    "field3": "Sube Ataque con estado."
+  },
+  {
+    "field2": "Entusiasmo",
+    "field3": "Sube At. reduce Prec."
+  },
+  {
+    "field2": "Gula",
+    "field3": "Consume baya antes."
+  },
+  {
+    "field2": "Intimidacion",
+    "field3": "Baja Ataque rival."
+  },
+  {
+    "field2": "Nerviosismo",
+    "field3": "Impide Baya rival."
+  },
+  {
+    "field2": "Elec. Estatica",
+    "field3": "Paraliza al contacto."
+  },
+  {
+    "field2": "Pararrayos",
+    "field3": "Atrae mov. Electrico."
+  },
+  {
+    "field2": "Cola Surf",
+    "field3": "Duplica Vel. en campo elec."
+  },
+  {
+    "field2": "Piel Electrica",
+    "field3": "Cambia mov. Normal a Elec."
+  },
+  {
+    "field2": "Electrogenesis",
+    "field3": "Crea campo electrico."
+  },
+  {
+    "field2": "Velo Arena",
+    "field3": "Sube Eva. en torm. arena."
+  },
+  {
+    "field2": "Impetu Arena",
+    "field3": "Sube Vel. en torm. arena."
+  },
+  {
+    "field2": "Manto Niveo",
+    "field3": "Sube Evasion en nieve."
+  },
+  {
+    "field2": "Quitanieves",
+    "field3": "Sube Vel. en nieve."
+  },
+  {
+    "field2": "Punto Toxico",
+    "field3": "Puede env. al contacto."
+  },
+  {
+    "field2": "Rivalidad",
+    "field3": "Sube pot. mismo sexo."
+  },
+  {
+    "field2": "Potencia Bruta",
+    "field3": "Sube mov. efectos sec."
+  },
+  {
+    "field2": "Gran Encanto",
+    "field3": "Enamora al contacto."
+  },
+  {
+    "field2": "Muro Magico",
+    "field3": "Inmune al daño indirecto."
+  },
+  {
+    "field2": "Compiescolta",
+    "field3": "Reduce daño aliados."
+  },
+  {
+    "field2": "Ignorante",
+    "field3": "Ignora cambio caract. rival."
+  },
+  {
+    "field2": "Dicha",
+    "field3": "Sube % efectos sec."
+  },
+  {
+    "field2": "Absorbe Fuego",
+    "field3": "Sube Fuego con Fuego."
+  },
+  {
+    "field2": "Nevada",
+    "field3": "Provoca Nieve."
+  },
+  {
+    "field2": "Tenacidad",
+    "field3": "Sube At.Esp. si baja caract."
+  },
+  {
+    "field2": "Cacheo",
+    "field3": "Percibe el objeto rival."
+  },
+  {
+    "field2": "Fuerza Mental",
+    "field3": "No puede amedrentarse."
+  },
+  {
+    "field2": "Allanamiento",
+    "field3": "Ignora muros y sustitutos."
+  },
+  {
+    "field2": "Hedor",
+    "field3": "Puede amedrentar al cont."
+  },
+  {
+    "field2": "Efecto Espora",
+    "field3": "Causa estado al contacto."
+  },
+  {
+    "field2": "Piel Seca",
+    "field3": "Recupera PS con Agua."
+  },
+  {
+    "field2": "Humedad",
+    "field3": "Impide explotar."
+  },
+  {
+    "field2": "Piel Milagro",
+    "field3": "Reduce Prec. mov. Estado."
+  },
+  {
+    "field2": "Trampa Arena",
+    "field3": "Impide camb. PKM terrestre."
+  },
+  {
+    "field2": "Poder Arena",
+    "field3": "Sube Ti. Ro. Ac. en arena."
+  },
+  {
+    "field2": "Rizos Rebeldes",
+    "field3": "Baja Vel. al contacto."
+  },
+  {
+    "field2": "Recogida",
+    "field3": "Puede obtener objetos."
+  },
+  {
+    "field2": "Experto",
+    "field3": "Sube potencia mov. debiles."
+  },
+  {
+    "field2": "Cobardia",
+    "field3": "Sube Vel. con Fa, Bi, Si."
+  },
+  {
+    "field2": "Flexibilidad",
+    "field3": "No puede paralizarse."
+  },
+  {
+    "field2": "Pelaje Recio",
+    "field3": "Reduce mov. contacto."
+  },
+  {
+    "field2": "Aclimatacion",
+    "field3": "Anula efecto atmosferico."
+  },
+  {
+    "field2": "Nado Rapido",
+    "field3": "Sube Vel. en lluvia."
+  },
+  {
+    "field2": "Espiritu Vital",
+    "field3": "No puede dormirse."
+  },
+  {
+    "field2": "Irascible",
+    "field3": "Sube At. si golpe critico."
+  },
+  {
+    "field2": "Competitivo",
+    "field3": "Sube At. al bajar caract."
+  },
+  {
+    "field2": "Justiciero",
+    "field3": "Sube At. con Siniestro."
+  },
+  {
+    "field2": "Cabeza Roca",
+    "field3": "Protege auto daño."
+  },
+  {
+    "field2": "Absorbe Agua",
+    "field3": "Recupera PS con Agua."
+  },
+  {
+    "field2": "Sincronia",
+    "field3": "Cambia estado rival al suyo."
+  },
+  {
+    "field2": "Calco",
+    "field3": "Copia habilidad rival."
+  },
+  {
+    "field2": "Impasible",
+    "field3": "Sube Vel. si se amedrenta."
+  },
+  {
+    "field2": "Corrosion",
+    "field3": "Envenena Acero y Veneno."
+  },
+  {
+    "field2": "Cuerpo Puro",
+    "field3": "Impide la bajada caract."
+  },
+  {
+    "field2": "Viscosecrecion",
+    "field3": "Daña si mov. absorcion PS."
+  },
+  {
+    "field2": "Robustez",
+    "field3": "Aguanta 1 PS si 100% PS."
+  },
+  {
+    "field2": "Iman",
+    "field3": "Impide rival Acero cambie."
+  },
+  {
+    "field2": "Cuerpo Llama",
+    "field3": "Quema al contacto."
+  },
+  {
+    "field2": "Velo Pastel",
+    "field3": "No puede envenenarse."
+  },
+  {
+    "field2": "Anticipacion",
+    "field3": "Presiente mov. fuertes."
+  },
+  {
+    "field2": "Despiste",
+    "field3": "Protege Atrac, Mofa, Intim."
+  },
+  {
+    "field2": "Ritmo Propio",
+    "field3": "No puede confundirse."
+  },
+  {
+    "field2": "Regeneracion",
+    "field3": "Cura PS al cambiar."
+  },
+  {
+    "field2": "Mano Rapida",
+    "field3": "Puede atacar primero."
+  },
+  {
+    "field2": "Caparazon",
+    "field3": "Impide golpes criticos."
+  },
+  {
+    "field2": "Calculo Final",
+    "field3": "Pot. mov. si ataca ultimo."
+  },
+  {
+    "field2": "Intrepido",
+    "field3": "Norm. y Lucha golpean Fant."
+  },
+  {
+    "field2": "Madrugar",
+    "field3": "Despierta antes."
+  },
+  {
+    "field2": "Hidratacion",
+    "field3": "Cura estado en lluvia."
+  },
+  {
+    "field2": "Gelido",
+    "field3": "Recupera PS en nieve."
+  },
+  {
+    "field2": "Viscosidad",
+    "field3": "Impide robo de objeto."
+  },
+  {
+    "field2": "Toque Toxico",
+    "field3": "Puede env. al contacto."
+  },
+  {
+    "field2": "Reaccion Quimica",
+    "field3": "Copia hab. aliado KO."
+  },
+  {
+    "field2": "Encadenado",
+    "field3": "Golpea maximo veces."
+  },
+  {
+    "field2": "Funda",
+    "field3": "Inmune daño clima y polvos."
+  },
+  {
+    "field2": "Levitacion",
+    "field3": "Inmune a Tierra."
+  },
+  {
+    "field2": "Cuerpo Maldito",
+    "field3": "Puede impedir movimiento."
+  },
+  {
+    "field2": "Sombra Trampa",
+    "field3": "Impide rival cambiar PKM."
+  },
+  {
+    "field2": "Armadura Fragil",
+    "field3": "Baja Def. sube Vel."
+  },
+  {
+    "field2": "Insomnio",
+    "field3": "No puede dormirse."
+  },
+  {
+    "field2": "Alerta",
+    "field3": "Percibe movimiento rival."
+  },
+  {
+    "field2": "Corte Fuerte",
+    "field3": "Impide bajada de Ataque."
+  },
+  {
+    "field2": "Insonorizar",
+    "field3": "Inmunidad mov. sonido."
+  },
+  {
+    "field2": "Detonacion",
+    "field3": "Daña al rival al debilitarse."
+  },
+  {
+    "field2": "Cosecha",
+    "field3": "Regenera Baya."
+  },
+  {
+    "field2": "Armadura Batalla",
+    "field3": "Impide golpes criticos."
+  },
+  {
+    "field2": "Audaz",
+    "field3": "Potencia mov. auto daño."
+  },
+  {
+    "field2": "Liviano",
+    "field3": "x2 Vel. al perder objeto."
+  },
+  {
+    "field2": "Puño Ferreo",
+    "field3": "Potencia los mov. puños."
+  },
+  {
+    "field2": "Gas Reactivo",
+    "field3": "Anula habilidades."
+  },
+  {
+    "field2": "Nebulogenesis",
+    "field3": "Crea campo niebla."
+  },
+  {
+    "field2": "Cura Natural",
+    "field3": "Cura estado al cambiar."
+  },
+  {
+    "field2": "Alma Cura",
+    "field3": "Cura estados aliados."
+  },
+  {
+    "field2": "Defensa Hoja",
+    "field3": "Cura estado en sol."
+  },
+  {
+    "field2": "Amor Filial",
+    "field3": "Golpea dos veces."
+  },
+  {
+    "field2": "Velo Agua",
+    "field3": "No puede quemarse."
+  },
+  {
+    "field2": "Iluminacion",
+    "field3": "Impide bajada de Precision."
+  },
+  {
+    "field2": "Energia Pura",
+    "field3": "Duplica el Ataque."
+  },
+  {
+    "field2": "Filtro",
+    "field3": "Reduce super eficaces."
+  },
+  {
+    "field2": "Antibarrera",
+    "field3": "Anula muros."
+  },
+  {
+    "field2": "Rompemoldes",
+    "field3": "Ignora hab. def. rival."
+  },
+  {
+    "field2": "Autoestima",
+    "field3": "Sube ataque al debilitar."
+  },
+  {
+    "field2": "Piel Celeste",
+    "field3": "Cambia mov. Normal a Vol."
+  },
+  {
+    "field2": "Rumia",
+    "field3": "Come Baya dos veces."
+  },
+  {
+    "field2": "Impostor",
+    "field3": "Copia forma PKM rival."
+  },
+  {
+    "field2": "Absorbe Elec.",
+    "field3": "Recupera PS con Elec."
+  },
+  {
+    "field2": "Pies Rapidos",
+    "field3": "Sube Vel. con estado."
+  },
+  {
+    "field2": "Descarga",
+    "field3": "Sube At. o At. Esp."
+  },
+  {
+    "field2": "Presion",
+    "field3": "Reduce PP rival."
+  },
+  {
+    "field2": "Inmunidad",
+    "field3": "No puede envenenarse."
+  },
+  {
+    "field2": "Colera",
+    "field3": "Sube At. Esp. mitad PS."
+  },
+  {
+    "field2": "Escama Especial",
+    "field3": "Sube Def. con estado."
+  },
+  {
+    "field2": "Multiescamas",
+    "field3": "Reduce daño maximos PS."
+  },
+  {
+    "field2": "Coranima",
+    "field3": "Sube At.Esp. al debilitar."
+  }
+]

@@ -1,5 +1,6 @@
 let pokemonData = [];
 let objetosData = [];
+let habilidadesData = [];
 let currentTab = 'pokemon';
 
 // Datos de Créditos y Changelog (Fácil de editar aquí mismo)
@@ -10,6 +11,7 @@ const infoExtra = {
     { rol: "Creador de Pokémon Quetzal", nombre: "TenmaRH", link: "#" }
   ],
   changelog: [
+    { version: "v1.3", fecha: "11 de Junio, 2026", cambios: ["Se agregó la pestaña de Habilidades con buscador.", "Las habilidades muestran qué Pokémon las poseen y de qué tipo (normal, secundaria, oculta).", "Las habilidades en la vista detallada del Pokémon son clicables para ver su información."] },
     { version: "v1.2", fecha: "11 de Junio, 2026", cambios: ["Se rediseñó el modal de detalle con header dinámico por tipo.", "Se eliminó el slot Shiny del modal de Pokémon.", "Se añaden sprites de objetos en la sección de objetos portados.", "Se corrigió el header del modal para que no quede cortado por el borde.", "Se aplicó el mismo diseño de header al modal de Objetos."] },
     { version: "v1.1", fecha: "10 de Junio, 2026", cambios: ["Se agregó la pestaña de créditos.", "Se rediseñó el modal de detalles.", "Se separó el ratio de captura del crecimiento para mejor lectura."] },
     { version: "v1.0", fecha: "09 de Junio, 2026", cambios: ["Lanzamiento inicial de la base de datos.", "Buscador funcional de Pokémon y Objetos."] }
@@ -26,16 +28,19 @@ const typeColors = {
 
 async function loadData() {
   try {
-    const [pokemonRes, objetosRes] = await Promise.all([
+    const [pokemonRes, objetosRes, habilidadesRes] = await Promise.all([
       fetch('pokemon.json'),
-      fetch('Objetos.json')
+      fetch('Objetos.json'),
+      fetch('Habilidades.json')
     ]);
     
     const pokemonJson = await pokemonRes.json();
     const objetosJson = await objetosRes.json();
+    const habilidadesJson = await habilidadesRes.json();
     
     pokemonData = pokemonJson.slice(1);
     objetosData = objetosJson.slice(1);
+    habilidadesData = habilidadesJson.slice(1);
     
     renderResults(pokemonData);
   } catch (e) {
@@ -83,6 +88,7 @@ window.addEventListener('click', e => {
 function renderCurrentTab() {
   if (currentTab === 'pokemon') renderResults(pokemonData);
   else if (currentTab === 'objetos') renderObjects(objetosData);
+  else if (currentTab === 'habilidades') renderHabilidades(habilidadesData);
   else renderCreditsAndChangelog();
 }
 
@@ -95,6 +101,9 @@ function filterCurrentTab(term) {
   } else if (currentTab === 'objetos') {
     const filtered = objetosData.filter(o => Object.values(o).join(' ').toLowerCase().includes(term));
     renderObjects(filtered);
+  } else if (currentTab === 'habilidades') {
+    const filtered = habilidadesData.filter(h => Object.values(h).join(' ').toLowerCase().includes(term));
+    renderHabilidades(filtered);
   }
 }
 
@@ -146,6 +155,120 @@ function renderObjects(objetos) {
     card.addEventListener('click', () => showObjectDetail(o));
     resultsDiv.appendChild(card);
   });
+}
+
+function renderHabilidades(habilidades) {
+  resultsDiv.innerHTML = '';
+  if (habilidades.length === 0) {
+    resultsDiv.innerHTML = '<p style="grid-column:1/-1;text-align:center;color:#aaa;">No se encontraron Habilidades</p>';
+    return;
+  }
+  habilidades.forEach(h => {
+    const card = document.createElement('div');
+    card.className = 'card';
+    card.innerHTML = `
+      <div style="
+        width: 56px; height: 56px; border-radius: 50%;
+        background: linear-gradient(135deg, rgba(0,200,83,0.25), rgba(100,221,23,0.1));
+        border: 2px solid rgba(0,200,83,0.4);
+        display: flex; align-items: center; justify-content: center;
+        margin: 0 auto 12px; font-size: 1.5rem;
+      ">🧬</div>
+      <h3 style="font-size:1rem;">${h.field2}</h3>
+      <p style="font-size:0.85em;color:#aaa;margin-top:8px;line-height:1.4;">${h.field3 || '-'}</p>
+    `;
+    card.addEventListener('click', () => showHabilidadDetail(h));
+    resultsDiv.appendChild(card);
+  });
+}
+
+function showHabilidadDetail(h) {
+  // Pokémon que poseen esta habilidad (normal, secundaria u oculta)
+  const nombreH = h.field2.toLowerCase();
+  const poseedores = pokemonData.filter(p => 
+    (p.field24 && p.field24.toLowerCase() === nombreH) ||
+    (p.field25 && p.field25.toLowerCase() === nombreH) ||
+    (p.field26 && p.field26.toLowerCase() === nombreH)
+  );
+
+  const getPokemonRole = (p) => {
+    if (p.field26 && p.field26.toLowerCase() === nombreH) return 'oculta';
+    if (p.field25 && p.field25.toLowerCase() === nombreH) return 'secundaria';
+    return 'normal';
+  };
+
+  const roleLabel = { normal: { txt: 'Normal', color: '#00c853' }, secundaria: { txt: 'Secundaria', color: '#64b5f6' }, oculta: { txt: 'Oculta', color: '#ff80ab' } };
+
+  const pokemonListHtml = poseedores.length === 0
+    ? '<p style="color:#aaa;font-size:0.9em;">Ningún Pokémon registrado con esta habilidad.</p>'
+    : `<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:12px;">
+        ${poseedores.map(p => {
+          const role = getPokemonRole(p);
+          const rl = roleLabel[role];
+          return `
+            <div style="
+              background:rgba(255,255,255,0.04);
+              border:1px solid rgba(255,255,255,0.08);
+              border-radius:14px;
+              padding:12px 8px;
+              text-align:center;
+              cursor:pointer;
+              transition:all 0.25s;
+            " onclick="modal.style.display='none'; setTimeout(()=>{ const pk = pokemonData.find(x=>x.field4==='${p.field4}'); if(pk) showPokemonDetail(pk); }, 200);"
+              onmouseover="this.style.borderColor='rgba(0,200,83,0.4)'; this.style.transform='translateY(-3px)'"
+              onmouseout="this.style.borderColor='rgba(255,255,255,0.08)'; this.style.transform='translateY(0)'">
+              <img src="${p.field5}" alt="${p.field2}" style="width:54px;height:54px;image-rendering:pixelated;">
+              <p style="font-size:0.75em;color:#ddd;margin-top:6px;font-weight:500;">${p.field2}</p>
+              <span style="font-size:0.65em;color:${rl.color};font-weight:600;">${rl.txt}</span>
+            </div>
+          `;
+        }).join('')}
+      </div>`;
+
+  const html = `
+    <!-- BANNER -->
+    <div style="
+      padding: 20px 60px 18px 24px;
+      background: linear-gradient(135deg, rgba(0,200,83,0.25), rgba(0,200,83,0.08));
+      border-bottom: 2px solid rgba(0,200,83,0.35);
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      min-height: 78px;
+    ">
+      <div style="
+        width:48px;height:48px;border-radius:50%;
+        background:linear-gradient(135deg,rgba(0,200,83,0.3),rgba(100,221,23,0.15));
+        border:2px solid rgba(0,200,83,0.5);
+        display:flex;align-items:center;justify-content:center;
+        font-size:1.4rem;flex-shrink:0;
+      ">🧬</div>
+      <h2 style="font-size:1.7rem;font-weight:700;color:#fff;">${h.field2}</h2>
+    </div>
+
+    <div class="modal-inner">
+      <!-- Descripción -->
+      <div style="
+        background:rgba(0,200,83,0.06);
+        border:1px solid rgba(0,200,83,0.2);
+        border-radius:16px;
+        padding:18px 20px;
+        margin-bottom:24px;
+      ">
+        <p style="color:#e8ecf7;font-size:1rem;line-height:1.7;">${h.field3 || 'Sin descripción.'}</p>
+      </div>
+
+      <!-- Pokémon que la poseen -->
+      <h3 style="color:var(--green);margin-bottom:14px;font-size:1rem;border-bottom:1px solid rgba(0,200,83,0.15);padding-bottom:8px;">
+        🔍 Pokémon con esta habilidad
+        <span style="font-size:0.8em;color:#aaa;font-weight:400;margin-left:8px;">(${poseedores.length})</span>
+      </h3>
+      ${pokemonListHtml}
+    </div>
+  `;
+
+  modalBody.innerHTML = html;
+  modal.style.display = 'block';
 }
 
 function renderCreditsAndChangelog() {
@@ -297,9 +420,9 @@ function showPokemonDetail(p) {
             <p><strong style="color:#aaa;">📈 Crecimiento</strong><br>${p.field21 || '-'}</p>
             <p><strong style="color:#aaa;">🥚 Grupo Huevo</strong><br>${p.field27 || '-'}${p.field28 ? ` / ${p.field28}` : ''}</p>
             <p style="grid-column:1/-1;"><strong style="color:#aaa;">🧬 Habilidades</strong><br>
-              <span style="color:#00c853;">${p.field24 || '-'}</span>
-              ${p.field25 ? ` / ${p.field25}` : ''}
-              ${p.field26 ? ` / <em style="color:#ff80ab;">${p.field26} (Oculta)</em>` : ''}
+              ${p.field24 ? `<span style="color:#00c853;cursor:pointer;border-bottom:1px dashed rgba(0,200,83,0.4);transition:opacity 0.2s;" onclick="openHabilidad('${p.field24.replace(/'/g,"\\'")}')">` + p.field24 + `</span>` : '-'}
+              ${p.field25 ? ` / <span style="cursor:pointer;border-bottom:1px dashed rgba(255,255,255,0.3);transition:opacity 0.2s;" onclick="openHabilidad('${p.field25.replace(/'/g,"\\'")}')">` + p.field25 + `</span>` : ''}
+              ${p.field26 ? ` / <em style="color:#ff80ab;cursor:pointer;border-bottom:1px dashed rgba(255,128,171,0.4);transition:opacity 0.2s;" onclick="openHabilidad('${p.field26.replace(/'/g,"\\'")}')">` + p.field26 + ` (Oculta)</em>` : ''}
             </p>
             ${p.field22 ? `<p style="grid-column:1/-1;"><strong style="color:#aaa;">🎒 Objetos</strong><br>
               <span style="display:inline-flex;align-items:center;gap:6px;flex-wrap:wrap;">
@@ -394,4 +517,9 @@ function showObjectDetail(o) {
   `;
   modalBody.innerHTML = html;
   modal.style.display = 'block';
+}
+// Función global para abrir habilidad desde el modal de Pokémon
+function openHabilidad(nombre) {
+  const h = habilidadesData.find(x => x.field2.toLowerCase() === nombre.toLowerCase());
+  if (h) showHabilidadDetail(h);
 }
