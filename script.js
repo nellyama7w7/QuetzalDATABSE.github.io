@@ -215,7 +215,7 @@ function showHabilidadDetail(h) {
               text-align:center;
               cursor:pointer;
               transition:all 0.25s;
-            " onclick="modal.style.display='none'; setTimeout(()=>{ const pk = pokemonData.find(x=>x.field3==='${p.field4}'); if(pk) showPokemonDetail(pk); }, 200);"
+            " onclick="modal.style.display='none'; setTimeout(()=>{ const pk = pokemonData.find(x=>x.field3==='${p.field3}'); if(pk) showPokemonDetail(pk); }, 200);"
               onmouseover="this.style.borderColor='rgba(0,200,83,0.4)'; this.style.transform='translateY(-3px)'"
               onmouseout="this.style.borderColor='rgba(255,255,255,0.08)'; this.style.transform='translateY(0)'">
               <img src="${p.field5}" alt="${p.field2}" style="width:54px;height:54px;image-rendering:pixelated;">
@@ -484,7 +484,7 @@ function showObjectDetail(o) {
               text-align:center;
               cursor:pointer;
               transition:all 0.25s;
-            " onclick="modal.style.display='none'; setTimeout(()=>{ const pk = pokemonData.find(x=>x.field3==='${p.field4}'); if(pk) showPokemonDetail(pk); }, 200);"
+            " onclick="modal.style.display='none'; setTimeout(()=>{ const pk = pokemonData.find(x=>x.field3==='${p.field3}'); if(pk) showPokemonDetail(pk); }, 200);"
               onmouseover="this.style.borderColor='rgba(0,200,83,0.4)'; this.style.transform='translateY(-3px)'"
               onmouseout="this.style.borderColor='rgba(255,255,255,0.08)'; this.style.transform='translateY(0)'">
               <img src="${p.field5}" alt="${p.field2}" style="width:54px;height:54px;image-rendering:pixelated;">
