@@ -11,6 +11,7 @@ const infoExtra = {
     { rol: "Creador de Pokémon Quetzal", nombre: "TenmaRH", link: "#" }
   ],
   changelog: [
+    { version: "v1.4", fecha: "11 de Junio, 2026", cambios: ["Los objetos en la vista detallada del Pokémon son clicables.", "El modal de Objetos muestra qué Pokémon portan el objeto (con indicador Común/Raro).", "Cada Pokémon portador es clicable para ir a su vista detallada."] },
     { version: "v1.3", fecha: "11 de Junio, 2026", cambios: ["Se agregó la pestaña de Habilidades con buscador.", "Las habilidades muestran qué Pokémon las poseen y de qué tipo (normal, secundaria, oculta).", "Las habilidades en la vista detallada del Pokémon son clicables para ver su información."] },
     { version: "v1.2", fecha: "11 de Junio, 2026", cambios: ["Se rediseñó el modal de detalle con header dinámico por tipo.", "Se eliminó el slot Shiny del modal de Pokémon.", "Se añaden sprites de objetos en la sección de objetos portados.", "Se corrigió el header del modal para que no quede cortado por el borde.", "Se aplicó el mismo diseño de header al modal de Objetos."] },
     { version: "v1.1", fecha: "10 de Junio, 2026", cambios: ["Se agregó la pestaña de créditos.", "Se rediseñó el modal de detalles.", "Se separó el ratio de captura del crecimiento para mejor lectura."] },
@@ -347,8 +348,9 @@ function showPokemonDetail(p) {
 
   const renderItemSprite = (nombre, objData) => {
     if (!nombre) return '';
+    const safe = nombre.replace(/'/g, "\\'");
     const spriteHtml = objData ? `<img src="${objData.field5}" alt="${nombre}" style="width:24px;height:24px;image-rendering:pixelated;vertical-align:middle;margin-right:4px;">` : '';
-    return `${spriteHtml}${nombre}`;
+    return `<span style="cursor:pointer;border-bottom:1px dashed rgba(255,255,255,0.3);display:inline-flex;align-items:center;gap:2px;transition:opacity 0.2s;" onclick="openObjeto('${safe}')">${spriteHtml}${nombre}</span>`;
   };
 
   const html = `
@@ -456,6 +458,43 @@ function showPokemonDetail(p) {
 }
 
 function showObjectDetail(o) {
+  // Pokémon que portan este objeto (campo 1 o campo 2)
+  const nombreO = o.field3.toLowerCase();
+  const portadores = pokemonData.filter(p =>
+    (p.field22 && p.field22.toLowerCase() === nombreO) ||
+    (p.field23 && p.field23.toLowerCase() === nombreO)
+  );
+
+  const getSlotLabel = (p) => {
+    if (p.field23 && p.field23.toLowerCase() === nombreO) return { txt: 'Raro', color: '#FFD700' };
+    return { txt: 'Común', color: '#81D4FA' };
+  };
+
+  const pokemonListHtml = portadores.length === 0
+    ? '<p style="color:#aaa;font-size:0.9em;">Ningún Pokémon registrado portando este objeto.</p>'
+    : `<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:12px;">
+        ${portadores.map(p => {
+          const sl = getSlotLabel(p);
+          return `
+            <div style="
+              background:rgba(255,255,255,0.04);
+              border:1px solid rgba(255,255,255,0.08);
+              border-radius:14px;
+              padding:12px 8px;
+              text-align:center;
+              cursor:pointer;
+              transition:all 0.25s;
+            " onclick="modal.style.display='none'; setTimeout(()=>{ const pk = pokemonData.find(x=>x.field4==='${p.field4}'); if(pk) showPokemonDetail(pk); }, 200);"
+              onmouseover="this.style.borderColor='rgba(0,200,83,0.4)'; this.style.transform='translateY(-3px)'"
+              onmouseout="this.style.borderColor='rgba(255,255,255,0.08)'; this.style.transform='translateY(0)'">
+              <img src="${p.field5}" alt="${p.field2}" style="width:54px;height:54px;image-rendering:pixelated;">
+              <p style="font-size:0.75em;color:#ddd;margin-top:6px;font-weight:500;">${p.field2}</p>
+              <span style="font-size:0.65em;color:${sl.color};font-weight:600;">${sl.txt}</span>
+            </div>
+          `;
+        }).join('')}
+      </div>`;
+
   const html = `
     <!-- BANNER SUPERIOR -->
     <div style="
@@ -513,6 +552,16 @@ function showObjectDetail(o) {
       </div>
 
     </div>
+
+    <!-- Pokémon portadores -->
+    <div style="margin-top:24px;">
+      <h3 style="color:var(--green);margin-bottom:14px;font-size:1rem;border-bottom:1px solid rgba(0,200,83,0.15);padding-bottom:8px;">
+        🎒 Pokémon que portan este objeto
+        <span style="font-size:0.8em;color:#aaa;font-weight:400;margin-left:8px;">(${portadores.length})</span>
+      </h3>
+      ${pokemonListHtml}
+    </div>
+
     </div><!-- end modal-inner -->
   `;
   modalBody.innerHTML = html;
@@ -522,4 +571,10 @@ function showObjectDetail(o) {
 function openHabilidad(nombre) {
   const h = habilidadesData.find(x => x.field2.toLowerCase() === nombre.toLowerCase());
   if (h) showHabilidadDetail(h);
+}
+
+// Función global para abrir objeto desde el modal de Pokémon
+function openObjeto(nombre) {
+  const o = objetosData.find(x => x.field3 && x.field3.toLowerCase() === nombre.toLowerCase());
+  if (o) showObjectDetail(o);
 }
